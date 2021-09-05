@@ -1,49 +1,63 @@
-import React from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { Navbar } from 'react-bootstrap';
 import './App.css';
 import CourseMainBody from './view/CourseMain';
-import {BrowserRouter as Router,Switch,Route, Link} from 'react-router-dom';
+import {Switch,Route, Link} from 'react-router-dom';
 //npm install
 
 //Home Page and basic
 function App() {
   return (
     <div className="App">
-      <Header/>
       <Nav/>
       <body>
-        <TopBar/>
-
-
-      </body>
-
-    <Router>
-    <li>
-        <Link to="/">Home</Link>
-    </li>
-    <li>
-        <Link to="/Course">Course</Link>
-    </li>
-
-    <Switch>
-      <Route exact path="/">
-        <Body />
-      </Route>
-      <Route path="/course">
-        <CourseMainBody />
-      </Route>
-    </Switch>
-    </Router>
+        {/* <TopBar/> */}
+      <Switch>
+        <Route exact path="/"> {/*change back later*/}
+          <LoginScreen />
+        </Route>
+        <Route exact path="/home">
+          <Body />
+        </Route>
+        <Route path="/course">
+          <CourseMainBody />
+        </Route>
+      </Switch>
+    </body>
     </div>
   );
 }
 
 function Body(){
   return (
-  <div>
-    <h3>Course</h3>
-    <h4>Semester 1/2020</h4>
+  <div className="App">
+    <h1 style={{fontSize:60}}>LO Tracker</h1>
+    <div style={{display:"inline-block"}}>
+      <input type="text" id="search" style={{height:25}}></input>🔎
+      
+      <select name="Date" id="sort" style={{margin:30}}>
+        <option value="Date">Date</option>
+        <option value="Name">Name</option>
+        <option value="Newest">Newest</option>
+      </select>
+    </div>
+    <CourseCard/>
+    <CourseCard/>
   </div>
+  )
+}
+
+function CourseCard(){
+  return(
+    <div className="coursecard">
+      <h3 style={{textAlign:'left'}}>Semester 1/2021</h3>
+      <ul className="courselist">
+        <a href="/course/:id"><li>CSC100 Tutorial Course</li></a>
+        <a href="/course/:id"><li>CSC101 Advanced Tutorial Course</li></a>
+        <a href="/course/:id"><li>CSC102 Python Programming</li></a>
+      </ul> 
+
+    </div>
   )
 }
 
@@ -63,16 +77,25 @@ function TopBar(){
 function Nav(){
   return <Navbar className="col-md-12 d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky"></div>
-            
-            </Navbar>
+         </Navbar>
 }
 
-function Header(){
+function LoginScreen(){
   return(
-    <head>
-      
-    </head>
+    <div className="formbox">
+      <h1 style={{fontSize:60,textAlign:"center"}}>LO Tracker</h1>
+      <h2>Login</h2>
+        <form action="/home" >
+          <label className="label">Username</label><br/>
+          <input type="text" id="fname" name="fname"/><br/>
+          <label className="label">Password</label><br/>
+          <input type="text" id="fname" name="fname"/><br/><br/>
+          
+          <input type="submit" value="Enter" style={{width:100}}/>
+        </form>
+    </div>
   )
 }
+
 
 export default App;

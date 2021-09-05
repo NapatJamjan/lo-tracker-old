@@ -9,12 +9,5 @@ function CourseMainBody(){
     )
 }
 
-function H(){
-    return (
-        <div>
-            h
-        </div>
-    )
-}
 
 export default CourseMainBody;
