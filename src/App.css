@@ -43,13 +43,23 @@
 
 .formbox{
   margin: auto;
-  width: 50%;
   padding: auto;
   
 }
 
-.label{
-  display:"inline-block";
-  text-align: left;
-  
+input{
+  text-align: center;
+}
+
+.floatbuttonArea{
+  position: absolute;
+  display: inline-block;
+  right: 25px;
+  bottom: 25px;
+}
+
+.floatbutton{
+  border-radius: 25px;
+  text-align: center;
+  text-decoration: none;
 }

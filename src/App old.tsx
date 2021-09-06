@@ -8,6 +8,7 @@ import {Switch, Route, Link, useParams, useRouteMatch, useHistory, Redirect } fr
 //Home Page and basic
 //Router already defined in index
 // this one for learning
+// the button that cause error <button onClick={goUser()}>Push User</button> 
 function App() {
   const hist = useHistory();
   const goUser = () => hist.push("/user"); // func must be constant, like function a(){hist.push}
@@ -25,7 +26,7 @@ function App() {
       <li>
           <Link to="/login">Login</Link>
       </li>
-      <button onClick={goUser()}>Push User</button>
+      {/*button used to be here */}
 
       <Switch>
         <Route exact path="/">

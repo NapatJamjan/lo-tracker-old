@@ -1,0 +1,71 @@
+.course{
+    margin: 5%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    text-align: left;
+}
+.navbar{
+    list-style-type: none;
+
+    padding: 0;
+    overflow: hidden;
+    border-bottom: 1px black solid;
+    justify-content: start;
+    
+}
+
+.navbar li a{
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.navbar li{
+    font-size: 18px;
+    padding-right: 5%;
+}
+
+.examcard{
+    width: 50%;
+    padding-bottom: 20px;
+}
+  
+.examlist{
+    list-style-type: none;
+    text-align: left;
+    margin: 0px;
+    padding-left: 0px;
+    border: #282c34 solid;
+    
+    
+}
+
+.questionlist{
+    list-style-type: none;
+    text-align: left;
+    margin-left: 25px;
+    padding-left: 0px;
+    border: #282c34 solid;
+    margin-bottom: 0px;
+}
+
+.questionlist h6{
+    border-bottom: #282c34 1px solid;
+    margin: 0;
+}
+
+.question{
+    list-style-type: none;
+    text-align: left;
+    margin-left: 50px;
+    padding-left: 0px;
+    border-left: #282c34 3px solid;
+    border-right: #282c34 3px solid;
+    
+}
+.question:last-child{
+    border-bottom: #282c34 3px solid;
+}
+.question p{
+    margin-bottom: 0px;
+}
