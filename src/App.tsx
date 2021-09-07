@@ -55,21 +55,35 @@ function CourseCard(){
     <div className="coursecard">
       <h3 style={{textAlign:'left'}}>Semester 1/2021</h3>
       <ul className="courselist">
-        <a href="/course/1/"><li>CSC100 Tutorial Course
+        {/* <a href="/course/1/"><li>CSC100 Tutorial Course
+          <span className="lastupdate">updated 5/9/2021</span> */}
+        <Link to={`/course/0/`}><li>CSC100 Tutorial Course
           <span className="lastupdate">updated 5/9/2021</span>
-        </li></a>
-        <a href="/course/2/"><li>CSC101 Advanced Tutorial Course
+        </li></Link>
+        <Link to={`/course/1/`}><li>CSC101 Advanced Tutorial Course
           <span className="lastupdate">updated 1/9/2021</span>
-        </li></a>
-        <a href="/course/3/"><li>CSC102 Python Programming
+        </li></Link>
+        <Link to={`/course/2/`}><li>CSC102 Python Programming
           <span className="lastupdate">updated 25/8/2021</span>
-        </li></a>
+        </li></Link>
       </ul> 
 
     </div>
   )
 }
 
+function CourseDataList(){
+  //for course input with dropdown 
+  return( 
+    <datalist id="courselist">
+        <option value="CSC100 Tutorial Course"/>
+        <option value="CSC101 Advanced Tutorial Course"/>
+        <option value="CSC102 Python Programming"/>
+    </datalist>
+  )
+}
+
+//Button at bottom right
 function ActionButtons(){
   return(
     <div className="floatbuttonArea">
@@ -87,12 +101,12 @@ export function ImportExcelToCourse(props:any){
      <button className="floatbutton" onClick={handleShow}><i className="fa fa-download"></i>Import</button>
   <Modal show={show} onHide={handleClose}>
     <ModalHeader closeButton>
-      <ModalTitle>Import an Exam</ModalTitle>
+      <ModalTitle>Import quiz result</ModalTitle>
     </ModalHeader>
     <ModalBody>
       <form>
       <label>Course</label><br/>
-      <input list="courselist" name="course"style={{width:250}}/><br/>
+      <input list="courselist" name="course" value={props.name} style={{width:250}}/><br/>
       <CourseDataList/>
       <ImportExcel/>
       </form>
@@ -134,16 +148,6 @@ function CreateCourse(){
   )
 }
 
-function CourseDataList(){
-  //for course input with dropdown 
-  return( 
-    <datalist id="courselist">
-        <option value="CSC100 Tutorial Course"/>
-        <option value="CSC101 Advanced Tutorial Course"/>
-        <option value="CSC102 Python Programming"/>
-    </datalist>
-  )
-}
 //Login
 
 function LoginScreen(){

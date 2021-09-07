@@ -1,0 +1,49 @@
+.edit{
+    right:45%;
+    position: absolute;
+}
+
+.quizcard{
+    width: 50%;
+    padding-bottom: 20px;
+}
+  
+.quizlist{
+    list-style-type: none;
+    text-align: left;
+    margin: 0px;
+    padding-left: 0px;
+    border: #282c34 solid;
+    
+    
+}
+
+.questionlist{
+    list-style-type: none;
+    text-align: left;
+    margin-left: 25px;
+    padding-left: 0px;
+    border: #282c34 solid;
+    margin-bottom: 0px;
+}
+
+.questionlist h6{
+    border-bottom: #282c34 1px solid;
+    margin: 0;
+}
+
+.question{
+    list-style-type: none;
+    text-align: left;
+    margin-left: 50px;
+    padding-left: 0px;
+    border-left: #282c34 3px solid;
+    border-right: #282c34 3px solid;
+    
+}
+.question:last-child{
+    border-bottom: #282c34 3px solid;
+}
+.question p{
+    margin-bottom: 0px;
+}

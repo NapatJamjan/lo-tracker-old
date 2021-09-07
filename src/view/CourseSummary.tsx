@@ -3,7 +3,7 @@ import './CourseSummary.css';
 function CourseSummary(){
     return(<div>
         <h2>Course Summary</h2>
-        <h3>-Exam Score<br/>-Outcome Score<br/>-Export</h3>
+        <h3>-Quiz Score<br/>-Outcome Score<br/>-Export</h3>
     </div>)
 }
 

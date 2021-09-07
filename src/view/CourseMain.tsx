@@ -7,7 +7,7 @@ import './CourseMain.css';
 import CourseOutcome from './CourseOutcome';
 import CourseStudent from './CourseStudent';
 import CourseSummary from './CourseSummary';
-//Exam/Quiz is in here
+//Quiz and course nav
 function CourseMain(){
     const {path} = useRouteMatch();
     return (<div> 
@@ -17,7 +17,7 @@ function CourseMain(){
             <NavBar/>
             <Switch>
                 <Route exact path={`${path}/`}>
-                    <CourseExam/>
+                    <CourseQuiz/>
                 </Route>
                 <Route path={`${path}/outcome`}>
                     <CourseOutcome/>
@@ -50,8 +50,8 @@ function NavBar(){
     const {path} = useRouteMatch();
     return(
         <ul className="navbar">
-            {/* <li><Link to="./">Exam</Link></li> */}
-            <li><Link to={`${path}/`}>Exam</Link></li>
+            {/* <li><Link to="./">Quiz</Link></li> */}
+            <li><Link to={`${path}/`}>Quiz</Link></li>
             <li><Link to={`${path}/outcome`}>Outcome</Link></li>
             <li><Link to={`${path}/student`}>Student</Link></li>
             <li><Link to={`${path}/summary`}>Summary</Link></li>
@@ -67,14 +67,14 @@ function Nav(){
 }
 
 
-//Exam List
-function CourseExam(props:any){
+//Quiz List
+function CourseQuiz(props:any){
     
     return(<div>
-        <h3>Exam List</h3>
-        <ExamCard name="Exam 1 Basic Programming"/>
-        <ExamCard name="Exam 2 Intermediate Programming"/>
-        <ExamCard name="Exam 3 Advanced Programming"/>
+        <h3>Quiz List</h3>
+        <QuizCard name="Quiz 1 Basic Programming"/>
+        <QuizCard name="Quiz 2 Intermediate Programming"/>
+        <QuizCard name="Quiz 3 Advanced Programming"/>
 
         <div className="floatbuttonArea">
         {/* <button className="floatbutton">Import</button> */}
@@ -83,12 +83,14 @@ function CourseExam(props:any){
     </div>)
 }
 
-function ExamCard(props:any){
+function QuizCard(props:any){
     const [open, setOpen] = useState(false);
-    return(<div className="examcard">
-        <h4 onClick={() => setOpen(!open)} className="examlist">
+    return(<div className="quizcard">
+        <h5 className="edit"><i className="fa fa-pencil"></i></h5>
+        <h4 onClick={() => setOpen(!open)} className="quizlist">
             {props.name}
         </h4>
+        
         <Collapse in={open}>
         <div>
             <Question name="Question 1 : Thing to know"></Question>
