@@ -41,21 +41,28 @@
   border-bottom: 3px solid;
 }
 
+.lastupdate{
+  color: grey;
+  font-size: 10px;
+  float: right;
+  margin-top:12px;
+}
+
 .formbox{
   margin: auto;
   padding: auto;
   
 }
 
-input{
+.formbox input{
   text-align: center;
 }
 
 .floatbuttonArea{
   position: absolute;
   display: inline-block;
-  right: 25px;
-  bottom: 25px;
+  right: 2.5%;
+  bottom: 2.5%;
 }
 
 .floatbutton{

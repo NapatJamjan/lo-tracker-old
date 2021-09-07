@@ -1,15 +1,16 @@
 import React, { useState, useReducer, useEffect } from 'react';
 import './App.css';
 import CourseMain from './view/CourseMain';
+import {ImportExcel} from './view/ReadExcel';
 import {Switch,Route, Link, Redirect} from 'react-router-dom';
 import styled from 'styled-components';
-//npm install
+import { Modal, ModalBody, ModalFooter, ModalTitle, Button } from 'react-bootstrap';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 
 //Home Page and login
 function App() {
   return (
     <div className="App">
-      {/* <Nav/> */}
       <div>
       </div>
       <body>
@@ -33,7 +34,6 @@ function Body(){
   return (
   <div className="App">
     <ActionButtons/>
-    {/*button for going to see login screen, same one as in course topbar*/}
       <Link to="/login"><button style={{float:"right",position:"absolute",right:10,top:10}}>
         <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" width="30"></img>
       </button></Link>
@@ -57,9 +57,15 @@ function CourseCard(){
     <div className="coursecard">
       <h3 style={{textAlign:'left'}}>Semester 1/2021</h3>
       <ul className="courselist">
-        <a href="/course/1/"><li>CSC100 Tutorial Course</li></a>
-        <a href="/course/2/"><li>CSC101 Advanced Tutorial Course</li></a>
-        <a href="/course/3/"><li>CSC102 Python Programming</li></a>
+        <a href="/course/1/"><li>CSC100 Tutorial Course
+          <span className="lastupdate">updated 5/9/2021</span>
+        </li></a>
+        <a href="/course/2/"><li>CSC101 Advanced Tutorial Course
+          <span className="lastupdate">updated 1/9/2021</span>
+        </li></a>
+        <a href="/course/3/"><li>CSC102 Python Programming
+          <span className="lastupdate">updated 25/8/2021</span>
+        </li></a>
       </ul> 
 
     </div>
@@ -69,9 +75,62 @@ function CourseCard(){
 function ActionButtons(){
   return(
     <div className="floatbuttonArea">
-      <button>H1</button>
-      <button>H2</button>
+        <ImportExcelToCourse/>
+        <CreateCourse/>
     </div>
+  )
+}
+
+export function ImportExcelToCourse(props:any){
+  const [show,setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  return(<div>
+     <button className="floatbutton" onClick={handleShow}>Import</button>
+
+  <Modal show={show} onHide={handleClose}>
+    <ModalHeader closeButton>
+      <ModalTitle>Import an Exam</ModalTitle>
+    </ModalHeader>
+    <ModalBody>
+      <form>
+      <label>Course</label><br/>
+      <input type="text" id="username" value={props.name} style={{width:250}}/><br/>
+      <ImportExcel/>
+      </form>
+    </ModalBody>
+    <ModalFooter>
+      <Button variant="primary" onClick={handleClose}>Confirm</Button>
+    </ModalFooter>
+  </Modal>
+  </div>
+  )
+}
+
+function CreateCourse(){
+  const [show,setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  return(<div>
+     <button className="floatbutton" onClick={handleShow}>Create</button>
+
+  <Modal show={show} onHide={handleClose}>
+    <ModalHeader closeButton>
+      <ModalTitle>Create a new course</ModalTitle>
+    </ModalHeader>
+    <ModalBody>
+      <form>
+      <label>Course Name</label><br/>
+      <input type="text" id="username" style={{width:250}}/><br/>
+      <label>Program</label><br/>
+      <input type="text" id="username" style={{width:250}}/><br/>
+      </form>
+    </ModalBody>
+    <ModalFooter>
+      <Button variant="primary" onClick={handleClose}>Confirm</Button>
+    </ModalFooter>
+  </Modal>
+  </div>
   )
 }
 

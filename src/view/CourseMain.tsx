@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Collapse, Navbar } from 'react-bootstrap';
 import { Route, Link, Switch,useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
+import { ImportExcelToCourse } from '../App';
 import './CourseMain.css';
 import CourseOutcome from './CourseOutcome';
 import CourseStudent from './CourseStudent';
@@ -74,6 +75,11 @@ function CourseExam(props:any){
         <ExamCard name="Exam 1 Basic Programming"/>
         <ExamCard name="Exam 2 Intermediate Programming"/>
         <ExamCard name="Exam 3 Advanced Programming"/>
+
+        <div className="floatbuttonArea">
+        {/* <button className="floatbutton">Import</button> */}
+        <ImportExcelToCourse name="CSC100 Tutorial Course"/>
+        </div>
     </div>)
 }
 
