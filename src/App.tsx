@@ -12,8 +12,7 @@ function App() {
   return (
     <div className="App">
       <div>
-      </div>
-      <body>
+      </div>  
       <Switch>
         <Route exact path="/">
           <Body />
@@ -25,7 +24,6 @@ function App() {
           <CourseMain/>
         </Route>
       </Switch>
-    </body>
     </div>
   );
 }
@@ -86,8 +84,7 @@ export function ImportExcelToCourse(props:any){
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return(<div>
-     <button className="floatbutton" onClick={handleShow}>Import</button>
-
+     <button className="floatbutton" onClick={handleShow}><i className="fa fa-download"></i>Import</button>
   <Modal show={show} onHide={handleClose}>
     <ModalHeader closeButton>
       <ModalTitle>Import an Exam</ModalTitle>
@@ -95,7 +92,8 @@ export function ImportExcelToCourse(props:any){
     <ModalBody>
       <form>
       <label>Course</label><br/>
-      <input type="text" id="username" value={props.name} style={{width:250}}/><br/>
+      <input list="courselist" name="course"style={{width:250}}/><br/>
+      <CourseDataList/>
       <ImportExcel/>
       </form>
     </ModalBody>
@@ -112,7 +110,7 @@ function CreateCourse(){
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return(<div>
-     <button className="floatbutton" onClick={handleShow}>Create</button>
+     <button className="floatbutton" onClick={handleShow}><i className="fa fa-plus-square"></i>Create</button>
 
   <Modal show={show} onHide={handleClose}>
     <ModalHeader closeButton>
@@ -121,7 +119,9 @@ function CreateCourse(){
     <ModalBody>
       <form>
       <label>Course Name</label><br/>
-      <input type="text" id="username" style={{width:250}}/><br/>
+      {/* <input type="text" id="username" style={{width:250}}/><br/> */}
+      <input list="courselist" name="course"style={{width:250}}/><br/>
+      <CourseDataList/>
       <label>Program</label><br/>
       <input type="text" id="username" style={{width:250}}/><br/>
       </form>
@@ -134,6 +134,16 @@ function CreateCourse(){
   )
 }
 
+function CourseDataList(){
+  //for course input with dropdown 
+  return( 
+    <datalist id="courselist">
+        <option value="CSC100 Tutorial Course"/>
+        <option value="CSC101 Advanced Tutorial Course"/>
+        <option value="CSC102 Python Programming"/>
+    </datalist>
+  )
+}
 //Login
 
 function LoginScreen(){

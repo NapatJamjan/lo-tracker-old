@@ -1,0 +1,7 @@
+Table th,thead,tbody,tr,td{
+    border: black 2px solid;
+}
+
+Table thead{
+    background-color:rgb(196, 195, 195);
+}
