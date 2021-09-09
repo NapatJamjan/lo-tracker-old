@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Button, Collapse, Navbar } from 'react-bootstrap';
 import { Route, Link, Switch,useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
-import { ImportExcelToCourse } from '../App';
+import { Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import './CourseMain.css';
 import CourseOutcome from './CourseOutcome';
 import CourseStudent from './CourseStudent';
 import CourseSummary from './CourseSummary';
+import {ImportExcel} from './ReadExcel';
 //Quiz and course nav
 function CourseMain(){
     const {path} = useRouteMatch();
@@ -116,5 +118,43 @@ function Question(props:any){
     </div>)
 
 }
+
+function ImportExcelToCourse(props:any){
+    const [show,setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    return(<div>
+       <button className="floatbutton" onClick={handleShow}><i className="fa fa-download"></i>Import</button>
+    <Modal show={show} onHide={handleClose}>
+      <ModalHeader closeButton>
+        <ModalTitle>Import quiz result</ModalTitle>
+      </ModalHeader>
+      <ModalBody>
+        <form>
+        <label>Course</label><br/>
+        <input list="courselist" name="course" value={props.name} style={{width:250}}/><br/>
+        <CourseDataList/>
+        <ImportExcel/>
+        </form>
+      </ModalBody>
+      <ModalFooter>
+        <Button variant="primary" onClick={handleClose}>Confirm</Button>
+      </ModalFooter>
+    </Modal>
+    </div>
+    )
+  }
+  function CourseDataList(){
+    //for course input with dropdown 
+    return( 
+      <datalist id="courselist">
+          <option value="CSC100 Tutorial Course"/>
+          <option value="CSC101 Advanced Tutorial Course"/>
+          <option value="CSC102 Python Programming"/>
+      </datalist>
+    )
+  }
+
+
 
 export default CourseMain;
