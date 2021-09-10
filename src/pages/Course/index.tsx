@@ -39,7 +39,7 @@ export default function CourseScreen() {
   return (
     <div>
       <NavigationBar/>
-      <body className="course">
+      <div className="course">
         <h4>CSC100 Tutorial Course</h4>
         <SubNavBar/>
         <Switch>
@@ -57,7 +57,7 @@ export default function CourseScreen() {
           </Route>
           <Redirect from={`${path}//*`} to={`${path}/*`} />
         </Switch>
-      </body>
+      </div>
     </div>
   );
 };

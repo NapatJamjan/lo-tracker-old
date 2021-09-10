@@ -39,9 +39,9 @@ export const PLOScreen: React.FC = () => {
 
 const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) => {
   const ids: Array<ID> = Array.from(data.keys());
-  console.log(ids.length);
   const [open, setOpen] = useState<Array<boolean>>(Array.from({length: ids.length}, () => false));
   function toggle(index: number) {
+    if (!hasChildren(ids[index])) return;
     open[index] = !open[index];
     setOpen(open.slice());
   }
@@ -58,11 +58,9 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
               <h4 onClick={() => hasChildren(id) && toggle(index)} className="quizlist">
                 {data.get(id)?.title}
               </h4>
-              {hasChildren(id) && (
-                <Collapse in={open[index]}>
-                  <RecursiveCollapseList data={data.get(id)?.subLO ?? new Map()}></RecursiveCollapseList>
-                </Collapse>
-              )}
+              <Collapse in={open[index]} key={id}>
+                <RecursiveCollapseList data={data.get(id)?.subLO ?? new Map()} key={id}></RecursiveCollapseList>
+              </Collapse>
             </div>
           );
         })

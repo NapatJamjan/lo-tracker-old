@@ -23,9 +23,8 @@ export const QuizScreen: React.FC = () => {
     return Array.from({length: quiz.questions.length + 1}, () => false);
   }));
   function toggle(row: number, col: number) {
-    let newOpen = open.map(row => row.slice());
-    newOpen[row][col] = !newOpen[row][col];
-    _setOPen(newOpen);
+    open[row][col] = !open[row][col];
+    _setOPen(open.slice());
   }
 
   return (
