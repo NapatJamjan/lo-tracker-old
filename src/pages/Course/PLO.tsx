@@ -29,11 +29,11 @@ export const PLOScreen: React.FC = () => {
     ])}],
   ]);
   return (
-    <CourseOutcome></CourseOutcome>
-    // <div>
-    //   <h3>Learning Outcome</h3>
-    //   <RecursiveCollapseList data={PLOs}></RecursiveCollapseList>
-    // </div>
+    <div>
+      <h3>Learning Outcome</h3>
+      <CourseOutcome></CourseOutcome> {/* Old version */}
+      <RecursiveCollapseList data={PLOs}></RecursiveCollapseList>
+    </div>
   );
 };
 
@@ -55,11 +55,13 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
           return (
             <div key={id}>
               <h5 className="edit"><i className="fa fa-pencil"></i></h5>
-              <h4 onClick={() => hasChildren(id) && toggle(index)} className="quizlist">
+              <h4 onClick={() => toggle(index)} className="quizlist">
                 {data.get(id)?.title}
               </h4>
-              <Collapse in={open[index]} key={id}>
-                <RecursiveCollapseList data={data.get(id)?.subLO ?? new Map()} key={id}></RecursiveCollapseList>
+              <Collapse in={open[index]}>
+                <div>
+                  <RecursiveCollapseList data={data.get(id)?.subLO ?? new Map()}></RecursiveCollapseList>
+                </div>
               </Collapse>
             </div>
           );
