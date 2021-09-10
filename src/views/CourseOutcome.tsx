@@ -5,10 +5,10 @@ import './CourseOutcome.css';
 function CourseOutcome(props:any){
     
     return(<div>
-        <h3>Learning Outcome</h3>
+        {/* <h3>Learning Outcome</h3>
         <QuizCard name="PLO1 : Programming Knowledge"/>
         <QuizCard name="PLO2 : Test Outcome"/>
-        <QuizCard name="PLO3 : Test Outcome"/>
+        <QuizCard name="PLO3 : Test Outcome"/> */}
 
     </div>)
 }

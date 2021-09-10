@@ -8,31 +8,38 @@ type LearningOutcomeMap = Map<ID, LearningOutcome>;
 interface LearningOutcome {
   title: string,
   subLO: LearningOutcomeMap
+  depth:number
 }
 
 export const PLOScreen: React.FC = () => {
   const PLOs: LearningOutcomeMap = new Map([
     ["ab201ksdn1", {
-      title: "PLO1", 
+      title: "PLO1 Programming Knowledge", 
       subLO: new Map([
-        ["ab201ksdo1", {title: "LO1", subLO: new Map()}],
-        ["ab201ksdp1", {title: "LO2", subLO: new Map([
+        ["ab201ksdo1", {title: "LO1 : Basic Java", subLO: new Map([
+          ["ab201ksep1", {title: "Level1 Hello World", subLO: new Map(),depth:2}],
+          ["ab201ksfp1", {title: "Level2 Conditional and Loop", subLO: new Map(),depth:2}],
+        ]),depth:1}],
+        ["ab201ksdp1", {title: "LO2 : C#", subLO: new Map([
           ["ab201ksep1", {title: "Level1", subLO: new Map()}],
           ["ab201ksfp1", {title: "Level2", subLO: new Map()}],
           ["ab201ksgp1", {title: "Level3", subLO: new Map()}],
-        ])}],
-        ["ab201ksdq1", {title: "LO3", subLO: new Map()}]
-      ])}],
-    ["ab201ksdn2", {title: "PLO2", subLO: new Map()}],
+        ]),depth:1}],
+        ["ab201ksdq1", {title: "LO3 : Python Programming", subLO: new Map(),depth:1}]
+      ]),depth:0}],
+    ["ab201ksdn2", {title: "PLO2", subLO: new Map(),depth:0}],
     ["ab201ksdn3", {title: "PLO3", subLO: new Map([
-      ["ab201ksdo3", {title: "LO1", subLO: new Map()}]
-    ])}],
+      ["ab201ksdo3", {title: "LO1", subLO: new Map(),depth:1}]
+    ]),depth:0}],
   ]);
   return (
-    <div>
+    <div >
       <h3>Learning Outcome</h3>
-      <CourseOutcome></CourseOutcome> {/* Old version */}
-      <RecursiveCollapseList data={PLOs}></RecursiveCollapseList>
+      <div style={{width:775,marginLeft:10}}>
+        <CourseOutcome></CourseOutcome> {/* Old version */}
+      <RecursiveCollapseList data={PLOs} ></RecursiveCollapseList>
+      </div>
+      
     </div>
   );
 };
@@ -53,13 +60,13 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
       {
         ids.map((id, index) => {
           return (
-            <div key={id}>
+            <div key={id} >
               <h5 className="edit"><i className="fa fa-pencil"></i></h5>
               <h4 onClick={() => toggle(index)} className="quizlist">
                 {data.get(id)?.title}
               </h4>
               <Collapse in={open[index]}>
-                <div>
+                <div style={{marginLeft:30}}>
                   <RecursiveCollapseList data={data.get(id)?.subLO ?? new Map()}></RecursiveCollapseList>
                 </div>
               </Collapse>

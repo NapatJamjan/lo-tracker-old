@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import CreateCourse from '../components/CreateCourse';
 
 export default function HomeScreen() {
   return (
@@ -19,6 +20,7 @@ export default function HomeScreen() {
       </div>
       <CourseCard/>
       <CourseCard/>
+      <CreateCourse/>
     </div>
   );
 };
@@ -50,3 +52,4 @@ function CourseCard(){
     </div>
   );
 }
+

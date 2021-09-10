@@ -14,10 +14,10 @@ export const QuizScreen: React.FC = () => {
     questions: ['Question 1: Thing to know', 'Question 2: Hello World', 'Question 3: What is Java']
   }, {
     title: 'Quiz 2 Intermediate Programming',
-    questions: ['Question 1: Thing to know', 'Question 2: Hello World', 'Question 3: What is Java']
+    questions: ['Question 1: Hard Question', 'Question 2: Hello World 2', 'Question 3: What is Java 2']
   }, {
     title: 'Quiz 3 Advanced Programming',
-    questions: ['Question 1: Thing to know', 'Question 2: Hello World', 'Question 3: What is Java']
+    questions: ['Question 1: How to', 'Question 2: Hello World 3', 'Question 3: What is coding']
   }];
   const [ open, _setOPen ] = useState<Array<Array<boolean>>>(quizes.map(quiz => { 
     return Array.from({length: quiz.questions.length + 1}, () => false);
@@ -28,19 +28,19 @@ export const QuizScreen: React.FC = () => {
   }
 
   return (
-    <div>
+    <div style={{marginLeft:10}}>
       <h3>Quiz List</h3>
 
       {
         quizes.map((quiz, row) => (
-          <div className="quizcard" key={`row-${row}`}>
+          <div className="quizcard" key={`row-${row}`} >
             <h5 className="edit"><i className="fa fa-pencil"></i></h5>
             <h4 onClick={() => toggle(row, 0)} className="quizlist">
               {quiz.title}
             </h4>
             <Collapse in={open[row][0]}>
               {
-                <div>
+                <div style={{marginLeft:30}}>
                   {quiz.questions.map((question, col) => (
                     <div key={`row-${row}-col-${col}`}>
                       <h5 className="edit"><i className="fa fa-pencil"></i></h5>
@@ -48,7 +48,7 @@ export const QuizScreen: React.FC = () => {
                         {question}
                       </h4>
                       <Collapse in={open[row][col + 1]}>
-                        <div className="question">
+                        <div className="question" style={{marginLeft:30}}>
                           <p>Max Score 5</p>
                           <p style={{fontWeight:"bolder"}}>Linked LO: LO1(1) LO2(2,3) LO3(1)</p>
                         </div>
