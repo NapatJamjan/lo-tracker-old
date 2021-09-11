@@ -2,22 +2,12 @@
   text-align: center;
 }
 
-.header{
-  background-color: gainsboro;
-  padding: 10px;
-  font-size: 12px;
-}
-
 .App input{
   margin: auto;
   width: 30%;
 }
 
-.coursecard{
-  width: 25%;
-  margin: auto;
-  padding-bottom: 20px;
-}
+/* Course List*/
 
 .courselist{
   list-style-type: none;
@@ -29,34 +19,12 @@
   border-bottom: 0px;
 }
 
-.courselist a,a:visited{
+.courselist a,a:visited,a:hover{
   text-decoration: none;
   color: black;
 }
-.courselist a:hover{
-  color: black;
-}
 
-.courselist li{
-  border-bottom: 3px solid;
-}
-
-.lastupdate{
-  color: grey;
-  font-size: 10px;
-  float: right;
-  margin-top:12px;
-}
-
-.formbox{
-  margin: auto;
-  padding: auto;
-  
-}
-
-.formbox input{
-  text-align: center;
-}
+/* Course Page End */
 
 .floatbuttonArea{
   position: absolute;

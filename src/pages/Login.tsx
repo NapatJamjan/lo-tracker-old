@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { Redirect } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '../shared/auth';
+import styled from 'styled-components';
 
 export default function LoginScreen(){
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -16,10 +17,10 @@ export default function LoginScreen(){
       <h2>Login</h2>
         <form onSubmit={handleSubmit((data) => login())}>
           <label>Email</label><br/>
-          <input style={{width:250}} {...register("email", { required: true })}/><br/>
+          <TextInput style={{width:250}} {...register("email", { required: true })}/><br/>
 
           <label>Password</label><br/>
-          <input style={{width:250}} {...register("password")}/><br/><br/>
+          <TextInput style={{width:250}} {...register("password")}/><br/><br/>
 
           {errors.email?<span>wrong format.</span>:<br/>}
 
@@ -28,3 +29,8 @@ export default function LoginScreen(){
     </div>
   )
 };
+
+const TextInput = styled.input`
+  text-align: center;
+`;
+

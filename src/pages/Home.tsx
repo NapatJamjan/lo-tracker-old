@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import CreateCourse from '../components/CreateCourse';
 
 export default function HomeScreen() {
@@ -27,29 +28,45 @@ export default function HomeScreen() {
 
 function CourseCard(){
   return (
-    <div className="coursecard">
+    <CourseDiv>
       <h3 style={{textAlign:'left'}}>Semester 1/2021</h3>
       <ul className="courselist">
         <Link to={`/course/0/`}>
-          <li>
+          <Courseli>
             CSC100 Tutorial Course
-            <span className="lastupdate">updated 5/9/2021</span>
-          </li>
+            <CourseSpan>updated 5/9/2021</CourseSpan>
+          </Courseli>
         </Link>
         <Link to={`/course/1/`}>
-          <li>
+          <Courseli>
             CSC101 Advanced Tutorial Course
-            <span className="lastupdate">updated 1/9/2021</span>
-          </li>
+            <CourseSpan>updated 1/9/2021</CourseSpan>
+          </Courseli>
         </Link>
         <Link to={`/course/2/`}>
-          <li>
+          <Courseli>
             CSC102 Python Programming
-            <span className="lastupdate">updated 25/8/2021</span>
-          </li>
+            <CourseSpan>updated 25/8/2021</CourseSpan>
+          </Courseli>
         </Link>
       </ul> 
-    </div>
+    </CourseDiv>
   );
 }
 
+const CourseDiv = styled.div`
+  width: 25%;
+  margin: auto;
+  padding-bottom: 20px;
+`;
+
+const Courseli = styled.li`
+  border-bottom: 3px solid;
+`;
+
+const CourseSpan = styled.span`
+  color: grey;
+  font-size: 10px;
+  float: right;
+  margin-top:12px;
+`;

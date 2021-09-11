@@ -81,8 +81,9 @@ function ImportExcelToCourse(props:any){
           <ModalTitle>Import quiz result</ModalTitle>
         </ModalHeader>
         <ModalBody>
+          <p style={{margin:0}}>Please import an excel file of the quiz result (.xlsx)</p>
           <form>
-            <label>Course</label><br/>
+            <label><b>Course</b></label><br/>
             <input list="courselist" name="course" value={props.name} style={{width:250}}/><br/>
             <CourseDataList/>
             <ImportExcel/>
