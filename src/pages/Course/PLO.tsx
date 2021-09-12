@@ -36,7 +36,6 @@ export const PLOScreen: React.FC = () => {
     <div >
       <h3>Learning Outcome</h3>
       <div style={{width:775,marginLeft:10}}>
-       {/* <CourseOutcome></CourseOutcome>  Old version */}
       <RecursiveCollapseList data={PLOs} ></RecursiveCollapseList>
       <ManageLO/>
       <h5 className="edit"><i className="fa fa-plus-circle" style={{fontSize:28,marginTop:10}}></i></h5>
