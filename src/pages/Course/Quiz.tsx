@@ -62,9 +62,7 @@ export const QuizScreen: React.FC = () => {
         ))
       }
 
-      <div className="floatbuttonArea">
-        <ImportExcelToCourse name="CSC100 Tutorial Course"/>
-      </div>
+      <ImportExcelToCourse name="CSC100 Tutorial Course"/>
     </div>
   );
 }
@@ -75,7 +73,9 @@ function ImportExcelToCourse(props:any){
   const handleShow = () => setShow(true);
   return(
     <div>
-      <button className="floatbutton" onClick={handleShow}><i className="fa fa-download"></i>Import</button>
+      <button className="floatbutton" onClick={handleShow} style={{position:"absolute",right:25,bottom:25}}>
+        <i className="fa fa-download"></i>Import
+      </button>
       <Modal show={show} onHide={handleClose}>
         <ModalHeader closeButton>
           <ModalTitle>Import quiz result</ModalTitle>

@@ -29,7 +29,7 @@ function Student(props:any){
     <tr>
       <td>{props.mail}</td>
       <td>{props.name}</td>
-      <td><button>action</button></td>
+      <td><button>Result</button></td>
     </tr>
   );
 }

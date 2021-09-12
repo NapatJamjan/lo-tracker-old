@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-bootstrap';
-import CourseOutcome from '../../views/CourseOutcome';
+import ManageLO from '../../components/ManageLO';
 import '../../views/CourseOutcome.css';
 type ID = string;
 type LearningOutcomeMap = Map<ID, LearningOutcome>;
@@ -38,6 +38,7 @@ export const PLOScreen: React.FC = () => {
       <div style={{width:775,marginLeft:10}}>
        {/* <CourseOutcome></CourseOutcome>  Old version */}
       <RecursiveCollapseList data={PLOs} ></RecursiveCollapseList>
+      <ManageLO/>
       <h5 className="edit"><i className="fa fa-plus-circle" style={{fontSize:28,marginTop:10}}></i></h5>
       </div>
       

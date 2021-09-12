@@ -8,7 +8,6 @@
 }
 
 /* Course List*/
-
 .courselist{
   list-style-type: none;
   text-align: left;
@@ -23,15 +22,7 @@
   text-decoration: none;
   color: black;
 }
-
 /* Course Page End */
-
-.floatbuttonArea{
-  position: absolute;
-  display: inline-block;
-  right: 2.5%;
-  bottom: 2.5%;
-}
 
 .floatbutton{
   border-radius: 50%;
