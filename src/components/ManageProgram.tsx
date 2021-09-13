@@ -4,31 +4,29 @@ import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import styled from 'styled-components';
 
 interface outcome{
-  title:string,
-  level: Array<string>
+    title:string,
+    level: Array<string>
 }
 
-export default function ManageLO(){
+export default function ManageProgram(){
     const [show,setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const LOs:Array<outcome> = [{
-        title:"LO1 Basic Java",level:['Level 1 : Basic and Hello World','Level 2 : Conditional and Loop','Level 3 : Function']
+        title:"Computer Science",level:['PLO1 : Programming Knowledge','PLO2 : Use Computer Science to ','PLO3 : a']
       },{
-        title:"LO2 Python",level:['Level 1 : Hello World','Level 2 : Conditional and Loop','Level 3 : Class']
-      },{
-        title:"LO3 Advanced Programming",level:['Level 1 : ','Level 2 : ','Level 3 : ']
+        title:"I.T.",level:['PLO1 : Technologies Knowledge','PLO2 : Internet Adaption','PLO3 : ']
       },
     ]
 
     return(<div>
-      <button className="floatbutton" onClick={handleShow} style={{position:"absolute",right:25,bottom:25}}>
-        <b>LO</b> <span>Manage</span>
-      </button>
-  
-    <Modal show={show} onHide={handleClose}>
+        <button className="floatbutton" onClick={handleShow} style={{position:"absolute",right:100,bottom:25}}>
+            <i className="fa fa-pencil-square"></i>
+            Program
+        </button>
+        <Modal show={show} onHide={handleClose}>
       <ModalHeader closeButton>
-        <ModalTitle>Manage Learning Outcome</ModalTitle>
+        <ModalTitle>Manage Programs</ModalTitle>
       </ModalHeader>
       <ModalBody>
         <form>

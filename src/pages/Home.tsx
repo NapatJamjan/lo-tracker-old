@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import CreateCourse from '../components/CreateCourse';
+import ManageProgram from '../components/ManageProgram';
 
 export default function HomeScreen() {
   return (
@@ -16,12 +17,12 @@ export default function HomeScreen() {
         <select name="Date" id="sort" style={{margin:30}}>
           <option value="Date">Date</option>
           <option value="Name">Name</option>
-          <option value="Newest">Newest</option>
         </select>
       </div>
       <CourseCard/>
       <CourseCard/>
       <CreateCourse/>
+      <ManageProgram/>
     </div>
   );
 };
