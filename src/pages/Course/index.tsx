@@ -5,6 +5,7 @@ import { PLOScreen } from './PLO';
 import { StudentScreen } from './Student';
 import { DashboardScreen } from './Dashboard';
 import NavigationBar from '../../components/Navbar';
+import {IndividualScore} from './Dashboard/IndividualScore';
 
 function SubNavBar() {
   const { url } = useRouteMatch();
@@ -52,8 +53,11 @@ export default function CourseScreen() {
           <Route path={`${path}/student`}>
             <StudentScreen/>
           </Route>
-          <Route path={`${path}/dashboard`}>
+          <Route exact path={`${path}/dashboard`}>
             <DashboardScreen/>
+          </Route>
+          <Route path={`${path}/dashboard/:id`}>
+            <IndividualScore/>
           </Route>
           <Redirect from={`${path}//*`} to={`${path}/*`} />
         </Switch>

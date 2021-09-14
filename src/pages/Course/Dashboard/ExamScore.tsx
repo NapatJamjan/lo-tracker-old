@@ -1,8 +1,8 @@
 import React from 'react';
 import { OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
-import Chart from './Chart';
+import {Chart} from './Chart';
 
-export default function ExamScore(){
+export const ExamScore:React.FC = (props) =>{
     return(
       <div>
         <Chart/>

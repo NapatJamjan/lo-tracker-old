@@ -1,7 +1,7 @@
 import { Tooltip } from "react-bootstrap";
 import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Legend, Bar } from "recharts";
 
-export default function Chart(props:any){
+export const Chart:React.FC = (props:any) =>{
     return(
       <div style={{position:"absolute",right:"1%",width:"40%",height:"50%",marginTop:"0.5%"}}>
         <select name="Total PLO%" style={{float:"right"}}>
