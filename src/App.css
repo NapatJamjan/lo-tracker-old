@@ -38,3 +38,19 @@
 .floatbutton i{
   font-size: 16px;
 }
+
+.table{
+  width: 60%;
+  margin: auto;
+  text-align: left;
+  table-layout: auto;
+}
+
+.table thead{
+  border-bottom: 3px lightgrey solid;
+}
+
+.tableSort{
+  float:right;
+  font-size:24px;
+}

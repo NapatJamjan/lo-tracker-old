@@ -1,9 +1,13 @@
 import React from 'react';
 import { OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
+import Chart from './Chart';
 
 export default function ExamScore(){
     return(
-      <Table hover>
+      <div>
+        <Chart/>
+     
+        <Table striped bordered hover className="table" style={{margin:0,width:"55%"}}>
           <thead>
             <tr>
               <th>Email</th>
@@ -19,6 +23,7 @@ export default function ExamScore(){
             <Student mail="moremail@mail.com" name="Student Studying"/>
           </tbody>
         </Table>
+      </div>
     )
 }
 

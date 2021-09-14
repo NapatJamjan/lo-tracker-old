@@ -5,11 +5,11 @@ export const StudentScreen: React.FC = () => {
   return (
     <div>
       <h2>Course Student</h2>
-      <Table hover>
+      <Table striped bordered className="table" responsive="sm">
         <thead>
-          <tr>
-            <th>Email</th>
-            <th>Name</th>
+          <tr style={{whiteSpace:"nowrap"}}>
+            <th>Email <i className="fa fa-sort tableSort"></i></th>
+            <th>Name  <i className="fa fa-sort tableSort"></i></th>
             <th>Action</th>
           </tr>
         </thead>
@@ -27,9 +27,9 @@ export const StudentScreen: React.FC = () => {
 function Student(props:any){
   return (
     <tr>
-      <td>{props.mail}</td>
+      <td>{props.mail}{/*<span style={{padding:30}}></span>*/}</td>
       <td>{props.name}</td>
-      <td><button>Result</button></td>
+      <td><button style={{marginRight:25}}>Score</button><button>PLO</button></td>
     </tr>
   );
 }
