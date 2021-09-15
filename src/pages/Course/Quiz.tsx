@@ -1,47 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Collapse, Modal, ModalBody, ModalFooter, ModalTitle, Button } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+import { useForm } from 'react-hook-form';
 import XLSX from 'xlsx';
 
 interface Quiz {
-  title: string,
-  questions: Array<string>
+  name: string,
+  question: Array<string>
 }
 
+const quizzes: Array<Quiz> = [{
+  name: 'Quiz 1 Basic Programming',
+  question: ['Question 1: Thing to know', 'Question 2: Hello World', 'Question 3: What is Java']
+}, {
+  name: 'Quiz 2 Intermediate Programming',
+  question: ['Question 1: Hard Question', 'Question 2: Hello World 2', 'Question 3: What is Java 2']
+}, {
+  name: 'Quiz 3 Advanced Programming',
+  question: ['Question 1: How to', 'Question 2: Hello World 3', 'Question 3: What is coding']
+}];
+
 export const QuizScreen: React.FC = () => {
-  const quizes: Array<Quiz> = [{
-    title: 'Quiz 1 Basic Programming',
-    questions: ['Question 1: Thing to know', 'Question 2: Hello World', 'Question 3: What is Java']
-  }, {
-    title: 'Quiz 2 Intermediate Programming',
-    questions: ['Question 1: Hard Question', 'Question 2: Hello World 2', 'Question 3: What is Java 2']
-  }, {
-    title: 'Quiz 3 Advanced Programming',
-    questions: ['Question 1: How to', 'Question 2: Hello World 3', 'Question 3: What is coding']
-  }];
-  const [ open, _setOPen ] = useState<Array<Array<boolean>>>(quizes.map(quiz => { 
-    return Array.from({length: quiz.questions.length + 1}, () => false);
+  const [ open, _setOpen ] = useState<Array<Array<boolean>>>(quizzes.map(quiz => { 
+    return Array.from({length: quiz.question.length + 1}, () => false);
   }));
   function toggle(row: number, col: number) {
     open[row][col] = !open[row][col];
-    _setOPen(open.slice());
+    _setOpen(open.slice());
   }
-
   return (
     <div style={{marginLeft:10}}>
       <h3>Quiz List</h3>
-
       {
-        quizes.map((quiz, row) => (
+        quizzes.map((quiz, row) => (
           <div className="quizcard" key={`row-${row}`} >
             <h5 className="edit"><i className="fa fa-pencil"></i></h5>
             <h4 onClick={() => toggle(row, 0)} className="quizlist">
-              {quiz.title}
+              {quiz.name}
             </h4>
             <Collapse in={open[row][0]}>
               {
                 <div style={{marginLeft:30}}>
-                  {quiz.questions.map((question, col) => (
+                  {quiz.question.map((question, col) => (
                     <div key={`row-${row}-col-${col}`}>
                       <h5 className="edit"><i className="fa fa-pencil"></i></h5>
                       <h4 onClick={() => toggle(row, col + 1)} className="quizlist">
@@ -69,51 +69,50 @@ export const QuizScreen: React.FC = () => {
 
 function ImportExcelToCourse(props:any){
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const { register, handleSubmit, setValue } = useForm<{name:string}>();
+  useEffect(() => {
+    if (!show) setValue('name', '');
+  }, [show]);
   return(
     <div>
-      <button className="floatbutton" onClick={handleShow} style={{position:"absolute",right:25,bottom:25}}>
+      <button className="floatbutton" onClick={() => setShow(true)} style={{position:"absolute",right:25,bottom:25}}>
         <i className="fa fa-download"></i>Import
       </button>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={() => setShow(false)}>
+      <form onSubmit={handleSubmit((data) => {addQuiz(data.name); setShow(false);})}>
         <ModalHeader closeButton>
           <ModalTitle>Import quiz result</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <p style={{margin:0}}>Please import an excel file of the quiz result (.xlsx)</p>
-          <form>
-            <label><b>Course</b></label><br/>
-            <input list="courselist" name="course" value={props.name} style={{width:250}}/><br/>
-            <CourseDataList/>
-            <ImportExcel/>
-          </form>
+          <label><b>Course</b></label><br/>
+          <input list="courselist" name="course" value={props.name} readOnly/><br/>
+          <label>Quiz Name</label><br/>
+          <input type="text" {...register('name')} required/><br/>
+          <ImportExcel/>
         </ModalBody>
         <ModalFooter>
-          <Button variant="primary" onClick={handleClose}>Confirm</Button>
+          <input type="submit" value="Import"/>
         </ModalFooter>
+        </form>
       </Modal>
     </div>
-  );
-}
-
-function CourseDataList() {
-  //for course input with dropdown 
-  return ( 
-    <datalist id="courselist">
-      <option value="CSC100 Tutorial Course"/>
-      <option value="CSC101 Advanced Tutorial Course"/>
-      <option value="CSC102 Python Programming"/>
-    </datalist>
   );
 }
 
 function ImportExcel(props: any) {
   return (
     <div>
+      <label>Choose file to import</label><br/>
       <input type="file" id="fileUpload" onChange={Upload}/>
     </div>
   );   
+}
+
+function addQuiz(nameval:string){
+  quizzes.push({
+    name:nameval,question:QuestionArray
+  });
 }
 
 function Upload() {
@@ -129,17 +128,26 @@ function Upload() {
         };
         reader.readAsBinaryString(fileUpload.files![0]);
       }
-    } else {
-      console.log("This browser does not support HTML5.");
-    }
-  } else {
-    console.log("Please upload a valid Excel file.");
-  }
+    } else {console.log("This browser does not support HTML5.");}
+  } else {alert("Please upload a valid Excel file.");}
 }
+
+interface ExcelData{
+  Question:string;
+}
+
+let QuestionArray:Array<string> = []
 
 function processExcel(data:any) {
   const workbook = XLSX.read(data, {type: 'binary'});
   const firstSheet = workbook.SheetNames[0];
   const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
-  console.log(excelRows);
+  for (let i = 0; i < excelRows.length; i++) {
+    QuestionArray.push((excelRows[i] as ExcelData).Question);
+  }
+  QuestionArray = QuestionArray.filter((x, i, a) => a.indexOf(x) === i)//filter dupe
+  for (let i = 0; i < QuestionArray.length; i++) { // add question no.
+    QuestionArray[i] = ("Question "+(i+1)+": "+QuestionArray[i])
+  }
+  console.log(QuestionArray);
 }
