@@ -2,39 +2,47 @@ import React from 'react';
 import { OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { student } from '../Student';
+import { student, students } from '../Student';
 import {Chart} from './Chart';
 
-export const OutcomeScore:React.FC = (props) => {
-  const students:Array<student> = [{id:0,mail:"mail@mail.com",name:"Student Studying"},
-    {id:1,mail:"mail@moremail.com",name:"Student2 Studying2"},{id:2,mail:"std@student.mail",name:"std A"},
-    {id:3,mail:"mail@mail.com",name:"Student Studying"}]
+export interface examscore{
+  id:number,
+  score:string,
+  detail:string;
+}
+
+export interface PLOscore{
+  id:number,
+  score:string,
+  detail:string;
+}
+
+export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIndividual:boolean}) {
     return(
       <div>
         <Chart/>
         <Table striped bordered hover className="table" style={{margin:0,width:"55%"}}>
           <thead>
             <tr>
-              <th>Email</th>
-              <th>Name</th>
-              <th>PLO1</th>
-              <th>PLO2</th>
-              <th>PLO3</th>
+              {props.tablehead.map(thdata => (<th>{thdata}</th>))}
             </tr>
           </thead>
           <tbody>
             {students.map(std => (
               <tr>
-                <td><Linkedcol to={`dashboard/${std.id}`}>{std.mail}</Linkedcol></td>
-                <td><Linkedcol to={`dashboard/${std.id}`}>{std.name}</Linkedcol></td>
-                <Overlay score="100%" detail={"LO1 100% \n LO2 100% \n LO3 100%"}/>
-                <Overlay score="80%" detail={"LO2 90% \n LO3 70%"}/>
-                <Overlay score="-" detail={"No score"}/>
+                {props.isIndividual === false && 
+                <td><Linkedcol to={`dashboard/${std.id}`}>{std.mail}</Linkedcol></td> ||
+                <td>{std.mail}</td>}
+                 {props.isIndividual === false && 
+                <td><Linkedcol to={`dashboard/${std.id}`}>{std.name}</Linkedcol></td> ||
+                <td>{std.name}</td>}
+                {props.score.map(scores =>(
+                  <Overlay score={scores.score} detail={[scores.detail]}/>
+                ))}
               </tr>
             ))}
           </tbody>
         </Table>
-        
       </div>
     )
 }
@@ -58,4 +66,5 @@ const HoverText = (props:any) =>(
 
 const Linkedcol = styled(Link)`
   text-decoration:none;
+  color:black;
 `;

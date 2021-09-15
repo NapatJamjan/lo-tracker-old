@@ -8,11 +8,12 @@ export interface student{
   name:string;
 }
 
+export const students:Array<student> = [{id:0,mail:"mail@mail.com",name:"Student Studying"},
+{id:1,mail:"mail@moremail.com",name:"Student2 Studying2"},{id:2,mail:"std@student.mail",name:"std A"},
+{id:3,mail:"mail@mail.com",name:"Student Studying"}]
+
 export const StudentScreen: React.FC = () => {
   const { path } = useRouteMatch();
-  const students:Array<student> = [{id:0,mail:"mail@mail.com",name:"Student Studying"},
-    {id:1,mail:"mail@moremail.com",name:"Student2 Studying2"},{id:2,mail:"std@student.mail",name:"std A"},
-    {id:3,mail:"mail@mail.com",name:"Student Studying"}]
   return (
     <div >
       <h2>Course Student</h2>
@@ -20,9 +21,9 @@ export const StudentScreen: React.FC = () => {
       <Table striped bordered className="table" responsive="sm">
         <thead>
           <tr>
-            <th>ID <i className="fa fa-sort tableSort"></i></th>
-            <th>Email <i className="fa fa-sort tableSort"></i></th>
-            <th>Name  <i className="fa fa-sort tableSort"></i></th>
+            <th>ID <TableSort/></th>
+            <th>Email <TableSort/></th>
+            <th>Name <TableSort/></th>
             <th>Action</th> 
           </tr>
         </thead>
@@ -44,3 +45,8 @@ export const StudentScreen: React.FC = () => {
   );
 }
 
+export function TableSort(props:any){
+  return(
+    <i className="fa fa-sort tableSort"></i>
+  )
+}
