@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Collapse, Modal, ModalBody, ModalFooter, ModalTitle, Button } from 'react-bootstrap';
+import { Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import XLSX from 'xlsx';
@@ -9,9 +9,9 @@ interface Quiz {
   question: Array<string>
 }
 
-const quizzes: Array<Quiz> = [{
+let quizzes: Array<Quiz> = [{
   name: 'Quiz 1 Basic Programming',
-  question: ['Question 1: Thing to know', 'Question 2: Hello World', 'Question 3: What is Java']
+  question: ['Question 1: Thing to know', 'Question 2: Hello World', 'Question 3: What is Java','Question 4: Java Application']
 }, {
   name: 'Quiz 2 Intermediate Programming',
   question: ['Question 1: Hard Question', 'Question 2: Hello World 2', 'Question 3: What is Java 2']
@@ -113,6 +113,7 @@ function addQuiz(nameval:string){
   quizzes.push({
     name:nameval,question:QuestionArray
   });
+  QuestionArray = [];
 }
 
 function Upload() {

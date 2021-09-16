@@ -5,7 +5,6 @@ import {examscore, PLOscore, ScoreTable} from './Dashboard/Table';
 import { student } from './Student';
 
 export const DashboardScreen: React.FC = () => {
-
   const [state,setState] = useState("Exam");
   return (
     <DashboardDiv>

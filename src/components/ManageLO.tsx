@@ -23,7 +23,7 @@ export default function ManageLO(){
 
     return(<div>
       <button className="floatbutton" onClick={handleShow} style={{position:"absolute",right:25,bottom:25}}>
-        <b>LO</b> <span>Manage</span>
+        <b style={{fontSize:14}}>LO</b> <span>Manage</span>
       </button>
   
     <Modal show={show} onHide={handleClose}>

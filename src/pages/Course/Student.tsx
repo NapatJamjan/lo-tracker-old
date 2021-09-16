@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 
 export interface student{
   id:number,
@@ -13,15 +13,14 @@ export const students:Array<student> = [{id:0,mail:"mail@mail.com",name:"Student
 {id:3,mail:"mail@mail.com",name:"Student Studying"}]
 
 export const StudentScreen: React.FC = () => {
-  const { path } = useRouteMatch();
   return (
     <div >
-      <h2>Course Student</h2>
+      <h2>Student</h2>
       <div style={{margin:"auto"}}>
       <Table striped bordered className="table" responsive="sm">
         <thead>
           <tr>
-            <th>ID <TableSort/></th>
+            {/* <th>ID <TableSort/></th> */}
             <th>Email <TableSort/></th>
             <th>Name <TableSort/></th>
             <th>Action</th> 
@@ -30,7 +29,7 @@ export const StudentScreen: React.FC = () => {
         <tbody>
           {students.map(std => (
             <tr>
-              <td>{std.id}</td>
+              {/* <td>{std.id}</td> */}
               <td>{std.mail}</td>
               <td>{std.name}</td>
               <td>

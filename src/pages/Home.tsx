@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Modal, ModalTitle, ModalBody, ModalFooter, Button } from 'react-bootstrap';
+import { Modal, ModalTitle, ModalBody, ModalFooter } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { ClassroomContext, CourseDetail } from '../shared/classroom';
 
@@ -46,7 +46,7 @@ function CreateNewProgram() {
         <form onSubmit={handleSubmit((data) => {addProgram(data.program); setShow(false);})}>
           <ModalHeader>
             <ModalTitle>
-              <span>Create a new course</span>
+              <span>Manage Program</span>
             </ModalTitle>
           </ModalHeader>
           <ModalBody>
