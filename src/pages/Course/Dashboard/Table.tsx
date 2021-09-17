@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { student, students } from '../Student';
 import {Chart} from './Chart';
 
-export interface examscore{
+export interface quizscore{
   id:number,
   score:string,
   detail:string;
@@ -16,6 +16,13 @@ export interface PLOscore{
   score:string,
   detail:string;
 }
+
+interface quizinfo{
+  shortname:string, // first 6 letter of quiz name (Quiz n)
+  maxscore:number
+}
+
+const Quizinfo:Array<quizinfo> = [{shortname:'Quiz 1',maxscore:5},{shortname:'Quiz 2',maxscore:10},{shortname:'Quiz 3',maxscore:10}]
 
 export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIndividual:boolean}) {
     return(
@@ -28,19 +35,23 @@ export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIn
             </tr>
           </thead>
           <tbody>
-            {students.map(std => (
+            {props.isIndividual === false &&  students.map(std => (
               <tr>
-                {props.isIndividual === false && 
-                <td><Linkedcol to={`dashboard/${std.id}`}>{std.mail}</Linkedcol></td> ||
-                <td>{std.mail}</td>}
-                 {props.isIndividual === false && 
-                <td><Linkedcol to={`dashboard/${std.id}`}>{std.name}</Linkedcol></td> ||
-                <td>{std.name}</td>}
+                <td><Linkedcol to={`dashboard/${std.id}`}>{std.mail}</Linkedcol></td>
+                <td><Linkedcol to={`dashboard/${std.id}`}>{std.name}</Linkedcol></td>
                 {props.score.map(scores =>(
                   <Overlay score={scores.score} detail={[scores.detail]}/>
                 ))}
-              </tr>
-            ))}
+              </tr>)) || Quizinfo.map(qi => (
+                <tr>
+                  <td>{qi.shortname}</td>
+                  <td>{qi.maxscore}</td>
+                  <td>{qi.maxscore}</td>
+                  {props.score.map(scores =>(
+                  <Overlay score={scores.score} detail={[scores.detail]}/>
+                ))}
+                </tr>
+              ))}
           </tbody>
         </Table>
       </div>

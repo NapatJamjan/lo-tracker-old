@@ -2,12 +2,12 @@ import { AnyRecord } from 'dns';
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { examscore, PLOscore, ScoreTable } from './Table';
+import { quizscore, PLOscore, ScoreTable } from './Table';
 
 export const IndividualScore:React.FC = (props:any) =>{
     const params = useParams<{id: string}>();
     const history = useHistory();
-    const [state,setState] = useState("Exam");
+    const [state,setState] = useState("Quiz");
     return(<MainDiv>
         <BackButton onClick={history.goBack}>
         <i className="fa fa-arrow-left" aria-hidden="true"></i>Back
@@ -17,34 +17,34 @@ export const IndividualScore:React.FC = (props:any) =>{
         <h6>Email : mail@mail.com</h6>  
         <DashboardDiv>
             <ButtonTab>
-                <button onClick={() => setState("Exam")} style={{marginRight:5}}>Exam Score</button>
+                <button onClick={() => setState("Quiz")} style={{marginRight:5}}>Quiz Score</button>
                 <button onClick={() => setState("Outcome")}>Outcome Score</button>
                 {state === "Outcome" && <ExportOutcome/>}
             </ButtonTab>
-            {state === "Exam" && <ExamScore/>}
+            {state === "Quiz" && <QuizScore/>}
             {state === "Outcome" && <OutcomeScore/>}
         </DashboardDiv>
     </MainDiv>)
 }
 
-function ExamScore(){
-    const exams:Array<examscore> = [{id:0,score:"5/5",detail:"Part 1 : 2/2 \n Part 1 : 3/3"},
-    {id:1,score:"10/10",detail:"Part 1 : 10/10"},{id:2,score:"1/10",detail:"Part 1 : 1/5 \n Part 2 : 0/5"}]
-    const ExamHead:Array<string> =['Email','Name']
-    for (let i = 0; i < exams.length; i++) { //count unique exam id
-      ExamHead.push('Exam'+(i+1));
+function QuizScore(){
+    const quizs:Array<quizscore> = [{id:0,score:"1/1",detail:"How to Java"},
+    {id:1,score:"2/2",detail:"Hello World"},{id:2,score:"2/2",detail:"Advanced Java"}]
+    const QuizHead:Array<string> =['Quiz','Max Score','Student Score']
+    for (let i = 0; i < quizs.length; i++) { //count unique quiz id
+      QuizHead.push('Question'+(i+1));
     }
     return(
-      <ScoreTable score={exams} tablehead={ExamHead} isIndividual={true} />
+      <ScoreTable score={quizs} tablehead={QuizHead} isIndividual={true} />
     )
 }
   
 function OutcomeScore(){
     const PLOs:Array<PLOscore> = [{id:0,score:"100%",detail:"LO1 100% \n LO2 100% \n LO3 100%"},
     {id:1,score:"80%",detail:"LO1 100% \n LO2 100% \n LO3 100%"},{id:2,score:"-",detail:"No score"}]
-    const PLOHead:Array<string> =['Email','Name']
+    const PLOHead:Array<string> =['PLO','Max Score','Student Score']
     for (let i = 0; i < PLOs.length; i++) { //count unique plo id
-      PLOHead.push('PLO'+(i+1));
+      PLOHead.push('LO'+(i+1));
     }
     return(
       <ScoreTable score={PLOs} tablehead={PLOHead} isIndividual={true}/>

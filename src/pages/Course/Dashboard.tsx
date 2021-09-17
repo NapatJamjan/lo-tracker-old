@@ -1,35 +1,35 @@
 import React, { useState } from 'react';
 import { OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import styled from 'styled-components';
-import {examscore, PLOscore, ScoreTable} from './Dashboard/Table';
+import {quizscore, PLOscore, ScoreTable} from './Dashboard/Table';
 import { student } from './Student';
 
 export const DashboardScreen: React.FC = () => {
-  const [state,setState] = useState("Exam");
+  const [state,setState] = useState("Quiz");
   return (
     <DashboardDiv>
       <h2 style={{textAlign:"center"}}>Summary</h2>
       <ButtonTab>
-        <button onClick={() => setState("Exam")} style={{marginRight:5}}>Exam Score</button>
+        <button onClick={() => setState("Quiz")} style={{marginRight:5}}>Quiz Score</button>
         <button onClick={() => setState("Outcome")}>Outcome Score</button>
         {state === "Outcome" && <ExportOutcome/>}
       </ButtonTab>
-      {state === "Exam" && <ExamScore/>}
+      {state === "Quiz" && <QuizScore/>}
       {state === "Outcome" && <OutcomeScore/>}
       
     </DashboardDiv>
   );
 };
 
-function ExamScore(){
-  const exams:Array<examscore> = [{id:0,score:"5/5",detail:"Part 1 : 2/2 \n Part 1 : 3/3"},
+function QuizScore(){
+  const quizs:Array<quizscore> = [{id:0,score:"5/5",detail:"Part 1 : 2/2 \n Part 1 : 3/3"},
   {id:1,score:"10/10",detail:"Part 1 : 10/10"},{id:2,score:"1/10",detail:"Part 1 : 1/5 \n Part 2 : 0/5"}]
-  const ExamHead:Array<string> =['Email','Name']
-  for (let i = 0; i < exams.length; i++) { //count unique exam id
-    ExamHead.push('Exam'+(i+1));
+  const QuizHead:Array<string> =['Email','Name']
+  for (let i = 0; i < quizs.length; i++) { //count unique quiz id
+    QuizHead.push('Quiz'+(i+1));
   }
   return(
-    <ScoreTable score={exams} tablehead={ExamHead} isIndividual={false}/>
+    <ScoreTable score={quizs} tablehead={QuizHead} isIndividual={false}/>
   )
 }
 

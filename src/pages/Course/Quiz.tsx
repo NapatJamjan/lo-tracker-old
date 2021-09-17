@@ -1,29 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import XLSX from 'xlsx';
-
-interface Quiz {
-  name: string,
-  question: Array<string>
-}
-
-let quizzes: Array<Quiz> = [{
-  name: 'Quiz 1 Basic Programming',
-  question: ['Question 1: Thing to know', 'Question 2: Hello World', 'Question 3: What is Java','Question 4: Java Application']
-}, {
-  name: 'Quiz 2 Intermediate Programming',
-  question: ['Question 1: Hard Question', 'Question 2: Hello World 2', 'Question 3: What is Java 2']
-}, {
-  name: 'Quiz 3 Advanced Programming',
-  question: ['Question 1: How to', 'Question 2: Hello World 3', 'Question 3: What is coding']
-}];
+import { QuizContext } from '../../shared/quiz';
 
 export const QuizScreen: React.FC = () => {
+  const {quizzes} = useContext(QuizContext)
   const [ open, _setOpen ] = useState<Array<Array<boolean>>>(quizzes.map(quiz => { 
     return Array.from({length: quiz.question.length + 1}, () => false);
   }));
+  useEffect(() => {
+    open.push(Array.from({length:quizzes[quizzes.length-1].question.length+1}, () => false))
+  }, [quizzes]);
   function toggle(row: number, col: number) {
     open[row][col] = !open[row][col];
     _setOpen(open.slice());
@@ -68,8 +57,9 @@ export const QuizScreen: React.FC = () => {
 }
 
 function ImportExcelToCourse(props:any){
+  const {addQuiz} = useContext(QuizContext)
   const [show, setShow] = useState(false);
-  const { register, handleSubmit, setValue } = useForm<{name:string}>();
+  const { register, handleSubmit, setValue } = useForm<{name:string,question:Array<string>}>();
   useEffect(() => {
     if (!show) setValue('name', '');
   }, [show]);
@@ -79,7 +69,9 @@ function ImportExcelToCourse(props:any){
         <i className="fa fa-download"></i>Import
       </button>
       <Modal show={show} onHide={() => setShow(false)}>
-      <form onSubmit={handleSubmit((data) => {addQuiz(data.name); setShow(false);})}>
+      <form onSubmit={handleSubmit((data) => {
+        data.question=QuestionArray ; addQuiz(data); setShow(false);QuestionArray=[];
+        })}>
         <ModalHeader closeButton>
           <ModalTitle>Import quiz result</ModalTitle>
         </ModalHeader>
@@ -90,6 +82,7 @@ function ImportExcelToCourse(props:any){
           <label>Quiz Name</label><br/>
           <input type="text" {...register('name')} required/><br/>
           <ImportExcel/>
+          <label>Right now accept only column "Question"</label>
         </ModalBody>
         <ModalFooter>
           <input type="submit" value="Import"/>
@@ -107,13 +100,6 @@ function ImportExcel(props: any) {
       <input type="file" id="fileUpload" onChange={Upload}/>
     </div>
   );   
-}
-
-function addQuiz(nameval:string){
-  quizzes.push({
-    name:nameval,question:QuestionArray
-  });
-  QuestionArray = [];
 }
 
 function Upload() {
