@@ -72,7 +72,7 @@ function ImportExcelToCourse(props:any){
       <form onSubmit={handleSubmit((data) => {
         data.question=QuestionArray ; addQuiz(data); setShow(false);QuestionArray=[];
         })}>
-        <ModalHeader closeButton>
+        <ModalHeader>
           <ModalTitle>Import quiz result</ModalTitle>
         </ModalHeader>
         <ModalBody>
@@ -121,6 +121,7 @@ function Upload() {
 
 interface ExcelData{
   Question:string;
+  MaxScore:number;
 }
 
 let QuestionArray:Array<string> = []

@@ -18,13 +18,14 @@ export interface PLOscore{
 }
 
 interface quizinfo{
-  shortname:string, // first 6 letter of quiz name (Quiz n)
+  shortname:string,
   maxscore:number
 }
 
 const Quizinfo:Array<quizinfo> = [{shortname:'Quiz 1',maxscore:5},{shortname:'Quiz 2',maxscore:10},{shortname:'Quiz 3',maxscore:10}]
 
 export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIndividual:boolean}) {
+  const dataAll = [[students],[props.score],[props.tablehead]]
     return(
       <div>
         <Chart/>
@@ -42,7 +43,7 @@ export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIn
                 {props.score.map(scores =>(
                   <Overlay score={scores.score} detail={[scores.detail]}/>
                 ))}
-              </tr>)) || Quizinfo.map(qi => (
+              </tr>)) || Quizinfo.map(qi => ( //individual page
                 <tr>
                   <td>{qi.shortname}</td>
                   <td>{qi.maxscore}</td>

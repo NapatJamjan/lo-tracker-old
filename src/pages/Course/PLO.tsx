@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Collapse } from 'react-bootstrap';
-import ManageLO from '../../components/ManageLO';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+import styled from 'styled-components';
+import { LOContext } from '../../shared/lo';
 import '../../views/CourseOutcome.css';
 type ID = string;
 type LearningOutcomeMap = Map<ID, LearningOutcome>;
@@ -40,7 +42,6 @@ export const PLOScreen: React.FC = () => {
       <ManageLO/>
       <h5 className="edit"><i className="fa fa-plus-circle" style={{fontSize:28,marginTop:10}}></i></h5>
       </div>
-      
     </div>
   );
 };
@@ -58,8 +59,7 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
   }
   return (
     <div>
-      {
-        ids.map((id, index) => {
+      {ids.map((id, index) => {
           return (
             <div key={id} >
               <h5 className="edit"><i className="fa fa-pencil"></i></h5>
@@ -73,8 +73,88 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
               </Collapse>
             </div>
           );
-        })
-      }
+        })}
     </div>
   );
 }
+
+//Manage LO
+function ManageLO(){
+  const [show,setShow] = useState(false);
+  return(<div>
+    <button className="floatbutton" onClick={()=>{setShow(true)}} style={{position:"absolute",right:25,bottom:25}}>
+      <b style={{fontSize:14}}>LO</b> <span>Manage</span>
+    </button>
+  <Modal show={show} onHide={()=>{setShow(false)}}>
+    <ModalHeader >
+      <ModalTitle>Manage Learning Outcome</ModalTitle>
+    </ModalHeader>
+    <ModalBody>
+      <form>
+        <LOCard/>
+        <p style={{marginBottom:25}}><RightButton className="fa fa-plus-circle"></RightButton></p>
+      </form>
+    </ModalBody>
+    <ModalFooter>
+      <Button variant="primary" onClick={()=>{setShow(false)}}>Save</Button>
+    </ModalFooter>
+  </Modal>
+  </div>
+  )
+}
+
+function LOCard(props:any){
+  const {los} = useContext(LOContext)
+  const [ open, _setOpen ] = useState<Array<Array<boolean>>>(los.map(lo => { 
+    return Array.from({length: lo.level.length + 1}, () => false);}));
+  useEffect(() => {
+    open.push(Array.from({length:los[los.length-1].level.length+1}, () => false))
+  }, [los]);
+  function toggle(row: number, col: number) {
+    open[row][col] = !open[row][col];
+    _setOpen(open.slice());
+  }
+  return (
+    <div>
+      {los.map((lo, row) => (
+          <CardDiv key={`row-${row}`} >
+            <h5 onClick={() => toggle(row, 0)} style={{marginBottom:3}}>
+              {lo.name}
+              <RightButton className="fa fa-window-close-o"></RightButton>
+            </h5>
+            <Collapse in={open[row][0]}>{
+              <div style={{marginLeft:20}}>
+                {lo.level.map((lvl, col) => (
+                  <div key={`row-${row}-col-${col}`}>
+                    <p onClick={() => toggle(row, col + 1)} style={{marginBottom:-3}}>
+                      {lvl}
+                      <LevelRightButton className="fa fa-window-close-o" ></LevelRightButton>
+                    </p>   
+                  </div>
+                ))}
+              <p><LevelRightButton className="fa fa-plus-circle"></LevelRightButton></p>
+              </div>
+            }</Collapse>
+          </CardDiv>
+        ))}
+    </div>
+)}
+
+const CardDiv = styled.div`
+border-bottom: grey 0.5px solid;
+margin-bottom: 10px;
+`;
+
+const RightButton = styled.i`
+position:absolute;
+right:15px;
+text-align:center;
+font-size: 24px;
+`;
+
+const LevelRightButton = styled.i`
+position:absolute;
+right:19px;
+text-align:center;
+font-size: 16px;
+`;

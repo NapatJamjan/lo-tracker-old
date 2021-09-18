@@ -22,8 +22,11 @@ interface QuizState{
 }
 
 export const QuizProvider:React.FC = ({children}) =>{   
-    const [quiz,setQuiz] = useState<QuizState>({quizzes:[{id:"0",name:"Quiz 0 : Default Quiz",
-        question:['Question 1 What is Computer Science about?','Question 2 Test question']}]});
+    const [quiz,setQuiz] = useState<QuizState>({quizzes:[
+        {id:"0",name:"Quiz 1 : Tutorial Quiz",
+        question:['Question 1 Test question','Question 2 What is Computer Science about?','Question 3 How to ']},
+        {id:"1",name:"Quiz 2 : Tutorial Quiz 2",
+        question:['Question 1 Test question 2','Question 2 What is a quiz','Question 3 How to ','Question 4 a']}]});
     const {quizzes} = quiz;
     //const addQuiz = (question:Array<string>) => setQuiz({...quiz})
     const addQuiz = ({name,question}: Omit<QuizDetail,'id'>) =>{

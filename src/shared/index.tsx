@@ -2,6 +2,7 @@ import React, { cloneElement } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './auth';
 import { ClassroomProvider } from './classroom';
+import { LOProvider } from './lo';
 import { QuizProvider } from './quiz';
 
 const ProviderComposer: React.FC<{
@@ -11,6 +12,7 @@ const ProviderComposer: React.FC<{
 };
 
 export const ContextProvider: React.FC = ({children}) => {
-  return (<ProviderComposer contexts={[<ClassroomProvider/>, <AuthProvider/>,<QuizProvider/>, <BrowserRouter/>]}>
+  return (<ProviderComposer contexts={[<ClassroomProvider/>, <AuthProvider/>,<QuizProvider/>,<LOProvider/>,
+   <BrowserRouter/>]}>
     {children}</ProviderComposer>);
 };

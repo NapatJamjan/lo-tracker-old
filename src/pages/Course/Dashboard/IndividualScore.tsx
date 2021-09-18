@@ -2,9 +2,11 @@ import { AnyRecord } from 'dns';
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { students } from '../Student';
 import { quizscore, PLOscore, ScoreTable } from './Table';
 
 export const IndividualScore:React.FC = (props:any) =>{
+    const studentlist = students;
     const params = useParams<{id: string}>();
     const history = useHistory();
     const [state,setState] = useState("Quiz");
@@ -13,8 +15,8 @@ export const IndividualScore:React.FC = (props:any) =>{
         <i className="fa fa-arrow-left" aria-hidden="true"></i>Back
         </BackButton>
         <h6>Course ID:{params.id}</h6>
-        <h6>Name : Student Studying</h6>
-        <h6>Email : mail@mail.com</h6>  
+        <h6>Name : {studentlist[parseInt(params.id)].name}</h6>
+        <h6>Email : {studentlist[parseInt(params.id)].mail}</h6>  
         <DashboardDiv>
             <ButtonTab>
                 <button onClick={() => setState("Quiz")} style={{marginRight:5}}>Quiz Score</button>
