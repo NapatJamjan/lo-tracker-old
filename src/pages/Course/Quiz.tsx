@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import XLSX from 'xlsx';
 import { QuizContext } from '../../shared/quiz';
+import { clearExcel, interpretExcel, QuestionArray } from '../../utils';
 
 export const QuizScreen: React.FC = () => {
   const {quizzes} = useContext(QuizContext)
@@ -71,7 +72,7 @@ function ImportExcelToCourse(props:any){
       </button>
       <Modal show={show} onHide={() => setShow(false)}>
       <form onSubmit={handleSubmit((data) => {
-        data.question=QuestionArray ; addQuiz(data); setShow(false);QuestionArray=[];
+        data.question=QuestionArray ; addQuiz(data); setShow(false); clearExcel();
         })}>
         <ModalHeader>
           <ModalTitle>Import quiz result</ModalTitle>
@@ -94,6 +95,7 @@ function ImportExcelToCourse(props:any){
 }
 
 function ImportExcel(props: any) {
+ 
   return (
     <div>
       <label>Choose a file to import</label><br/>
@@ -102,41 +104,9 @@ function ImportExcel(props: any) {
   );   
 }
 
-function Upload() {
+function Upload(){
   const fileUpload = (document.getElementById('fileUpload') as HTMLInputElement);
-  const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
-  if (regex.test(fileUpload.value.toLowerCase())) {
-    if (typeof (FileReader) !== 'undefined') {
-      const reader = new FileReader();
-      if (reader.readAsBinaryString) {
-        reader.onload = (e) => {
-            processExcel(reader.result);
-        };
-        reader.readAsBinaryString(fileUpload.files![0]);
-      }
-    } else {console.log("This browser does not support HTML5.");}
-  } else {alert("Please upload a valid Excel file.");}
-}
-
-interface ExcelColumn{
-  Question:string;
-  MaxScore:number;
-}
-
-let QuestionArray:Array<string> = []
-
-function processExcel(data:any) {
-  const workbook = XLSX.read(data, {type: 'binary'});
-  const firstSheet = workbook.SheetNames[0];
-  const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
-  for (let i = 0; i < excelRows.length; i++) {
-    QuestionArray.push((excelRows[i] as ExcelColumn).Question);
-  }
-  QuestionArray = QuestionArray.filter((x, i, a) => a.indexOf(x) === i)//filter dupe
-  for (let i = 0; i < QuestionArray.length; i++) { // add question no.
-    QuestionArray[i] = ("Question "+(i+1)+": "+QuestionArray[i])
-  }
-  console.log(QuestionArray);
+  interpretExcel(fileUpload);
 }
 
 export const Quizcard = styled.div`

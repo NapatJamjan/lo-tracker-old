@@ -20,7 +20,6 @@ export const StudentScreen: React.FC = () => {
       <Table striped bordered className="table" responsive="sm">
         <thead>
           <tr>
-            {/* <th>ID <TableSort/></th> */}
             <th>Email <TableSort/></th>
             <th>Name <TableSort/></th>
             <th>Action</th> 
@@ -29,7 +28,6 @@ export const StudentScreen: React.FC = () => {
         <tbody>
           {students.map(std => (
             <tr>
-              {/* <td>{std.id}</td> */}
               <td>{std.mail}</td>
               <td>{std.name}</td>
               <td>
