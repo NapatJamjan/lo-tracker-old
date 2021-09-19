@@ -2,7 +2,7 @@ import React from 'react';
 import { OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { student, students } from '../Student';
+import { student, students, TableSort } from '../Student';
 import {Chart} from './Chart';
 
 export interface quizscore{
@@ -17,22 +17,25 @@ export interface PLOscore{
   detail:string;
 }
 
-interface quizinfo{
+interface tablehead{
   shortname:string,
   maxscore:number
 }
 
-const Quizinfo:Array<quizinfo> = [{shortname:'Quiz 1',maxscore:5},{shortname:'Quiz 2',maxscore:10},{shortname:'Quiz 3',maxscore:10}]
+const Quizinfo:Array<tablehead> = [{shortname:'Quiz 1',maxscore:5},{shortname:'Quiz 2',maxscore:10},{shortname:'Quiz 3',maxscore:10}]
+const PLOinfo:Array<tablehead> = [{shortname:'PLO 1',maxscore:100},{shortname:'PLO 2',maxscore:100},{shortname:'PLO 3',maxscore:100}]
 
 export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIndividual:boolean}) {
-  const dataAll = [[students],[props.score],[props.tablehead]]
+  let TableheadInfo = []
+  if(props.tablehead[0] =='PLO'){TableheadInfo = PLOinfo}
+  else{TableheadInfo = Quizinfo}
     return(
       <div>
         <Chart/>
         <Table striped bordered hover className="table" style={{margin:0,width:"55%"}}>
           <thead>
             <tr>
-              {props.tablehead.map(thdata => (<th>{thdata}</th>))}
+              {props.tablehead.map(thdata => (<th>{thdata}<TableSort/></th>))}
             </tr>
           </thead>
           <tbody>
@@ -43,7 +46,7 @@ export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIn
                 {props.score.map(scores =>(
                   <Overlay score={scores.score} detail={[scores.detail]}/>
                 ))}
-              </tr>)) || Quizinfo.map(qi => ( //individual page
+              </tr>)) ||  TableheadInfo.map(qi => ( //individual page
                 <tr>
                   <td>{qi.shortname}</td>
                   <td>{qi.maxscore}</td>

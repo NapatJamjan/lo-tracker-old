@@ -16,7 +16,7 @@ export const Chart:React.FC = (props:any) =>{
         </select><br/>
         {chartType === "TPLO" && <ChartBar/>}
         {chartType === "TLO" && <ChartLine/>}
-        {chartType === "Test" && <ChartPie/>}
+        {chartType === "Test" && <ChartTest/>}
       </div>
     );
   }
@@ -56,7 +56,7 @@ function ChartLine(props:any){
   )
 }
 
-function ChartPie(props:any){
+function ChartTest(props:any){
   const data = [{name: 'PLO1', score: 75},{name: 'PLO2', score: 100},{name: 'PLO3', score: 30},
   {name: 'PLO4', score: 60}];
   return(

@@ -3,7 +3,7 @@ import { Button, Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'rea
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import styled from 'styled-components';
 import { LOContext } from '../../shared/lo';
-import '../../views/CourseOutcome.css';
+import { EditIcon, Quizlist } from './Quiz';
 type ID = string;
 type LearningOutcomeMap = Map<ID, LearningOutcome>;
 
@@ -39,8 +39,8 @@ export const PLOScreen: React.FC = () => {
       <h3>Learning Outcome</h3>
       <div style={{width:775,marginLeft:10}}>
       <RecursiveCollapseList data={PLOs} ></RecursiveCollapseList>
+      <EditIcon><i className="fa fa-plus-circle" style={{fontSize:28,marginTop:10}}></i></EditIcon>
       <ManageLO/>
-      <h5 className="edit"><i className="fa fa-plus-circle" style={{fontSize:28,marginTop:10}}></i></h5>
       </div>
     </div>
   );
@@ -62,10 +62,10 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
       {ids.map((id, index) => {
           return (
             <div key={id} >
-              <h5 className="edit"><i className="fa fa-pencil"></i></h5>
-              <h4 onClick={() => toggle(index)} className="quizlist">
+              <EditIcon><i className="fa fa-pencil"></i></EditIcon>
+              <Quizlist onClick={() => toggle(index)}>
                 {data.get(id)?.title}
-              </h4>
+              </Quizlist>
               <Collapse in={open[index]}>
                 <div style={{marginLeft:30}}>
                   <RecursiveCollapseList data={data.get(id)?.subLO ?? new Map()}></RecursiveCollapseList>
@@ -140,21 +140,22 @@ function LOCard(props:any){
     </div>
 )}
 
+//MangeLO
 const CardDiv = styled.div`
-border-bottom: grey 0.5px solid;
-margin-bottom: 10px;
+  border-bottom: grey 0.5px solid;
+  margin-bottom: 10px;
 `;
 
 const RightButton = styled.i`
-position:absolute;
-right:15px;
-text-align:center;
-font-size: 24px;
+  position:absolute;
+  right:15px;
+  text-align:center;
+  font-size: 24px;
 `;
 
 const LevelRightButton = styled.i`
-position:absolute;
-right:19px;
-text-align:center;
-font-size: 16px;
+  position:absolute;
+  right:19px;
+  text-align:center;
+  font-size: 16px;
 `;

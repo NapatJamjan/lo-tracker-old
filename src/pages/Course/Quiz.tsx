@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
 import XLSX from 'xlsx';
 import { QuizContext } from '../../shared/quiz';
 
@@ -22,32 +23,32 @@ export const QuizScreen: React.FC = () => {
       <h3>Quiz List</h3>
       {
         quizzes.map((quiz, row) => (
-          <div className="quizcard" key={`row-${row}`} >
-            <h5 className="edit"><i className="fa fa-pencil"></i></h5>
-            <h4 onClick={() => toggle(row, 0)} className="quizlist">
+          <Quizcard key={`row-${row}`} >
+            <EditIcon><i className="fa fa-pencil"></i></EditIcon>
+            <Quizlist onClick={() => toggle(row, 0)}>
               {quiz.name}
-            </h4>
+            </Quizlist>
             <Collapse in={open[row][0]}>
               {
                 <div style={{marginLeft:30}}>
                   {quiz.question.map((question, col) => (
                     <div key={`row-${row}-col-${col}`}>
-                      <h5 className="edit"><i className="fa fa-pencil"></i></h5>
-                      <h4 onClick={() => toggle(row, col + 1)} className="quizlist">
+                      <EditIcon><i className="fa fa-pencil"></i></EditIcon>
+                      <Quizlist onClick={() => toggle(row, col + 1)}>
                         {question}
-                      </h4>
+                      </Quizlist>
                       <Collapse in={open[row][col + 1]}>
-                        <div className="question" style={{marginLeft:30}}>
+                        <Question style={{marginLeft:30}}>
                           <p>Max Score 5</p>
                           <p style={{fontWeight:"bolder"}}>Linked LO: LO1(1) LO2(2,3) LO3(1)</p>
-                        </div>
+                        </Question>
                       </Collapse>
                     </div>
                   ))}
                 </div>
               }
             </Collapse>
-          </div>
+          </Quizcard>
         ))
       }
 
@@ -82,7 +83,6 @@ function ImportExcelToCourse(props:any){
           <label>Quiz Name</label><br/>
           <input type="text" {...register('name')} required/><br/>
           <ImportExcel/>
-          <label>Right now accept only column "Question"</label>
         </ModalBody>
         <ModalFooter>
           <input type="submit" value="Import"/>
@@ -96,7 +96,7 @@ function ImportExcelToCourse(props:any){
 function ImportExcel(props: any) {
   return (
     <div>
-      <label>Choose file to import</label><br/>
+      <label>Choose a file to import</label><br/>
       <input type="file" id="fileUpload" onChange={Upload}/>
     </div>
   );   
@@ -106,7 +106,6 @@ function Upload() {
   const fileUpload = (document.getElementById('fileUpload') as HTMLInputElement);
   const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
   if (regex.test(fileUpload.value.toLowerCase())) {
-    // let fileName = fileUpload.files![0].name; 
     if (typeof (FileReader) !== 'undefined') {
       const reader = new FileReader();
       if (reader.readAsBinaryString) {
@@ -119,7 +118,7 @@ function Upload() {
   } else {alert("Please upload a valid Excel file.");}
 }
 
-interface ExcelData{
+interface ExcelColumn{
   Question:string;
   MaxScore:number;
 }
@@ -131,7 +130,7 @@ function processExcel(data:any) {
   const firstSheet = workbook.SheetNames[0];
   const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
   for (let i = 0; i < excelRows.length; i++) {
-    QuestionArray.push((excelRows[i] as ExcelData).Question);
+    QuestionArray.push((excelRows[i] as ExcelColumn).Question);
   }
   QuestionArray = QuestionArray.filter((x, i, a) => a.indexOf(x) === i)//filter dupe
   for (let i = 0; i < QuestionArray.length; i++) { // add question no.
@@ -139,3 +138,37 @@ function processExcel(data:any) {
   }
   console.log(QuestionArray);
 }
+
+export const Quizcard = styled.div`
+  width: 50%;
+  padding-bottom: 20px;
+`;
+
+export const Quizlist = styled.h4`
+  list-style-type: none;
+  text-align: left;
+  margin: 0px;
+  padding-left: 0px;
+  border: #282c34 solid;
+  margin-top: -2px;
+`;
+
+export const EditIcon = styled.h5`
+  right:45%;
+  position: absolute;
+`;
+
+export const Question = styled.div`
+  list-style-type: none;
+  text-align: left;
+  margin-left: 50px;
+  padding-left: 0px;
+  border-left: #282c34 3px solid;
+  border-right: #282c34 3px solid;
+  &:last-child{
+    border-bottom: #282c34 3px solid;
+  }
+  p{
+    margin-bottom: 0px;
+  }
+`;

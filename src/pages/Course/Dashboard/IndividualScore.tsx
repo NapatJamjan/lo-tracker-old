@@ -14,6 +14,7 @@ export const IndividualScore:React.FC = (props:any) =>{
         <BackButton onClick={history.goBack}>
         <i className="fa fa-arrow-left" aria-hidden="true"></i>Back
         </BackButton>
+        <h4 style={{position:"absolute",left:0,right:0,textAlign:"center"}}>Individual Summary</h4>
         <h6>Course ID:{params.id}</h6>
         <h6>Name : {studentlist[parseInt(params.id)].name}</h6>
         <h6>Email : {studentlist[parseInt(params.id)].mail}</h6>  
