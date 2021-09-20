@@ -16,7 +16,6 @@ export const DashboardScreen: React.FC = () => {
       </ButtonTab>
       {state === "Quiz" && <QuizScore/>}
       {state === "Outcome" && <OutcomeScore/>}
-      
     </DashboardDiv>
   );
 };
@@ -29,7 +28,7 @@ function QuizScore(){
     QuizHead.push('Quiz'+(i+1));
   }
   return(
-    <ScoreTable score={quizs} tablehead={QuizHead} isIndividual={false}/>
+    <ScoreTable score={quizs} tablehead={QuizHead} isIndividual={false} chartType="quiz"/>
   )
 }
 
@@ -41,7 +40,7 @@ function OutcomeScore(){
     PLOHead.push('PLO'+(i+1));
   }
   return(
-    <ScoreTable score={PLOs} tablehead={PLOHead} isIndividual={false}/>
+    <ScoreTable score={PLOs} tablehead={PLOHead} isIndividual={false} chartType="plo"/>
   )
 }
 

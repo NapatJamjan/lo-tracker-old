@@ -117,19 +117,24 @@ function LOCard(props:any){
   return (
     <div>
       {los.map((lo, row) => (
-          <CardDiv key={`row-${row}`} >
-            <h5 onClick={() => toggle(row, 0)} style={{marginBottom:3}}>
+          <CardDiv key={`row-${row}`}>
+            <div style={{display:"flex"}}>
+            <i className="fa fa-angle-down" onClick={() => toggle(row, 0)} style={{fontSize:28}}></i>
+            <h5 style={{marginBottom:3,paddingRight:5}} contentEditable="true">
               {lo.name}
-              <RightButton className="fa fa-window-close-o"></RightButton>
             </h5>
+            <RightButton className="fa fa-window-close-o"></RightButton>
+            </div>
             <Collapse in={open[row][0]}>{
-              <div style={{marginLeft:20}}>
+              <div style={{marginLeft:28}}>
                 {lo.level.map((lvl, col) => (
                   <div key={`row-${row}-col-${col}`}>
-                    <p onClick={() => toggle(row, col + 1)} style={{marginBottom:-3}}>
+                    <div style={{display:"flex"}}>
+                    <p onClick={() => toggle(row, col + 1)} style={{marginBottom:-3,paddingRight:5}} contentEditable="true">
                       {lvl}
-                      <LevelRightButton className="fa fa-window-close-o" ></LevelRightButton>
                     </p>   
+                    <LevelRightButton className="fa fa-window-close-o" ></LevelRightButton>
+                    </div>
                   </div>
                 ))}
               <p><LevelRightButton className="fa fa-plus-circle"></LevelRightButton></p>
@@ -144,6 +149,7 @@ function LOCard(props:any){
 const CardDiv = styled.div`
   border-bottom: grey 0.5px solid;
   margin-bottom: 10px;
+  overflow: hidden;
 `;
 
 const RightButton = styled.i`

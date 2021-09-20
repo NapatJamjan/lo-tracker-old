@@ -27,7 +27,7 @@ function ChartBar(props:any){
     return(
         <ResponsiveContainer>
           <BarChart data={data} width={600} height={300}>
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3"/>
             <XAxis dataKey="name" />
             <YAxis type="number" domain={[0, 100]}/>
             <Tooltip/>

@@ -38,7 +38,7 @@ function QuizScore(){
       QuizHead.push('Question'+(i+1));
     }
     return(
-      <ScoreTable score={quizs} tablehead={QuizHead} isIndividual={true} />
+      <ScoreTable score={quizs} tablehead={QuizHead} isIndividual={true} chartType="quiz"/>
     )
 }
   
@@ -50,7 +50,7 @@ function OutcomeScore(){
       PLOHead.push('LO'+(i+1));
     }
     return(
-      <ScoreTable score={PLOs} tablehead={PLOHead} isIndividual={true}/>
+      <ScoreTable score={PLOs} tablehead={PLOHead} isIndividual={true} chartType="plo"/>
     )
 }
   

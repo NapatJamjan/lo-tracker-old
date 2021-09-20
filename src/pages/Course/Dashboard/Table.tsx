@@ -25,7 +25,7 @@ interface tablehead{
 const Quizinfo:Array<tablehead> = [{shortname:'Quiz 1',maxscore:5},{shortname:'Quiz 2',maxscore:10},{shortname:'Quiz 3',maxscore:10}]
 const PLOinfo:Array<tablehead> = [{shortname:'PLO 1',maxscore:100},{shortname:'PLO 2',maxscore:100},{shortname:'PLO 3',maxscore:100}]
 
-export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIndividual:boolean}) {
+export function ScoreTable (props:{score:Array<any>,tablehead:Array<string>,isIndividual:boolean,chartType:string}) {
   let TableheadInfo = []
   if(props.tablehead[0] =='PLO'){TableheadInfo = PLOinfo}
   else{TableheadInfo = Quizinfo}

@@ -3,7 +3,6 @@ import { Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-boots
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import XLSX from 'xlsx';
 import { QuizContext } from '../../shared/quiz';
 import { clearExcel, interpretExcel, QuestionArray } from '../../utils';
 
@@ -52,7 +51,6 @@ export const QuizScreen: React.FC = () => {
           </Quizcard>
         ))
       }
-
       <ImportExcelToCourse name="CSC100 Tutorial Course"/>
     </div>
   );
@@ -72,7 +70,13 @@ function ImportExcelToCourse(props:any){
       </button>
       <Modal show={show} onHide={() => setShow(false)}>
       <form onSubmit={handleSubmit((data) => {
-        data.question=QuestionArray ; addQuiz(data); setShow(false); clearExcel();
+        if(QuestionArray.length == 0){
+          QuestionArray.push("No question imported");
+        }
+        data.question=QuestionArray; 
+        addQuiz(data); 
+        setShow(false); 
+        clearExcel();
         })}>
         <ModalHeader>
           <ModalTitle>Import quiz result</ModalTitle>
