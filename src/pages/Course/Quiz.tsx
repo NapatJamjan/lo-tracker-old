@@ -7,19 +7,19 @@ import { QuizContext } from '../../shared/quiz';
 import { clearExcel, interpretExcel, QuestionArray } from '../../utils';
 
 export const QuizScreen: React.FC = () => {
-  const {quizzes} = useContext(QuizContext)
+  const { quizzes } = useContext(QuizContext)
   const [ open, _setOpen ] = useState<Array<Array<boolean>>>(quizzes.map(quiz => { 
     return Array.from({length: quiz.question.length + 1}, () => false);
   }));
   useEffect(() => {
-    open.push(Array.from({length:quizzes[quizzes.length-1].question.length+1}, () => false))
+    open.push(Array.from({length: quizzes[quizzes.length-1].question.length+1}, () => false))
   }, [quizzes]);
   function toggle(row: number, col: number) {
     open[row][col] = !open[row][col];
     _setOpen(open.slice());
   }
   return (
-    <div style={{marginLeft:10}}>
+    <div style={{marginLeft: 10}}>
       <h3>Quiz List</h3>
       {
         quizzes.map((quiz, row) => (
@@ -30,7 +30,7 @@ export const QuizScreen: React.FC = () => {
             </Quizlist>
             <Collapse in={open[row][0]}>
               {
-                <div style={{marginLeft:30}}>
+                <div style={{marginLeft: 30}}>
                   {quiz.question.map((question, col) => (
                     <div key={`row-${row}-col-${col}`}>
                       <EditIcon><i className="fa fa-pencil"></i></EditIcon>
@@ -38,9 +38,9 @@ export const QuizScreen: React.FC = () => {
                         {question}
                       </Quizlist>
                       <Collapse in={open[row][col + 1]}>
-                        <Question style={{marginLeft:30}}>
+                        <Question style={{marginLeft: 30}}>
                           <p>Max Score 5</p>
-                          <p style={{fontWeight:"bolder"}}>Linked LO: LO1(1) LO2(2,3) LO3(1)</p>
+                          <p style={{fontWeight: "bolder"}}>Linked LO: LO1(1) LO2(2,3) LO3(1)</p>
                         </Question>
                       </Collapse>
                     </div>
@@ -56,42 +56,42 @@ export const QuizScreen: React.FC = () => {
   );
 }
 
-function ImportExcelToCourse(props:any){
-  const {addQuiz} = useContext(QuizContext)
+function ImportExcelToCourse(props: any){
+  const { addQuiz } = useContext(QuizContext)
   const [show, setShow] = useState(false);
-  const { register, handleSubmit, setValue } = useForm<{name:string,question:Array<string>}>();
+  const { register, handleSubmit, setValue } = useForm<{name: string, question: Array<string>}>();
   useEffect(() => {
     if (!show) setValue('name', '');
   }, [show]);
   return(
     <div>
-      <button className="floatbutton" onClick={() => setShow(true)} style={{position:"absolute",right:25,bottom:25}}>
+      <button className="floatbutton" onClick = {() => setShow(true)} style = {{position: "absolute", right: 25, bottom:25}}>
         <i className="fa fa-download"></i>Import
       </button>
       <Modal show={show} onHide={() => setShow(false)}>
-      <form onSubmit={handleSubmit((data) => {
-        if(QuestionArray.length == 0){
-          QuestionArray.push("No question imported");
-        }
-        data.question=QuestionArray; 
-        addQuiz(data); 
-        setShow(false); 
-        clearExcel();
+        <form onSubmit={handleSubmit((data) => {
+          if (QuestionArray.length == 0) {
+            QuestionArray.push("No question imported");
+          }
+          data.question = QuestionArray;
+          addQuiz(data);
+          setShow(false);
+          clearExcel();
         })}>
-        <ModalHeader>
-          <ModalTitle>Import quiz result</ModalTitle>
-        </ModalHeader>
-        <ModalBody>
-          <p style={{margin:0}}>Please import an excel file of the quiz result (.xlsx)</p>
-          <label><b>Course</b></label><br/>
-          <input list="courselist" name="course" value={props.name} readOnly/><br/>
-          <label>Quiz Name</label><br/>
-          <input type="text" {...register('name')} required/><br/>
-          <ImportExcel/>
-        </ModalBody>
-        <ModalFooter>
-          <input type="submit" value="Import"/>
-        </ModalFooter>
+          <ModalHeader>
+            <ModalTitle>Import quiz result</ModalTitle>
+          </ModalHeader>
+          <ModalBody>
+            <p style={{ margin: 0 }}>Please import an excel file of the quiz result (.xlsx)</p>
+            <label><b>Course</b></label><br/>
+            <input list="courselist" name="course" value={props.name} readOnly /><br/>
+            <label>Quiz Name</label><br/>
+            <input type="text" {...register('name')} required /><br/>
+            <ImportExcel/>
+          </ModalBody>
+          <ModalFooter>
+            <input type="submit" value="Import"/>
+          </ModalFooter>
         </form>
       </Modal>
     </div>
@@ -99,7 +99,6 @@ function ImportExcelToCourse(props:any){
 }
 
 function ImportExcel(props: any) {
- 
   return (
     <div>
       <label>Choose a file to import</label><br/>
@@ -128,7 +127,7 @@ export const Quizlist = styled.h4`
 `;
 
 export const EditIcon = styled.h5`
-  right:45%;
+  right: 45%;
   position: absolute;
 `;
 

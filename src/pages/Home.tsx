@@ -10,14 +10,14 @@ export default function HomeScreen() {
   return (
     <div className="App">
       <Link to="/login">
-        <button style={{float:"right",position:"absolute",right:10,top:10}}>
+        <button style={{float: "right", position: "absolute", right: 10, top: 10}}>
           <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" width="30" alt=""></img>
         </button>
       </Link>
-      <h1 style={{fontSize:60,paddingTop:20}}>LO Tracker</h1>
-      <div style={{display:"inline-block"}}>
-        <input type="text" id="search" placeholder="Search here" style={{height:25}}></input>🔎
-        <select name="Date" id="sort" style={{margin:30}}>
+      <h1 style={{fontSize: 60, paddingTop: 20}}>LO Tracker</h1>
+      <div style={{display: "inline-block"}}>
+        <input type="text" id="search" placeholder="Search here" style={{height: 25}}></input>🔎
+        <select name="Date" id="sort" style={{margin: 30}}>
           <option value="Date">Date</option>
           <option value="Name">Name</option>
         </select>
@@ -38,7 +38,7 @@ function CreateNewProgram() {
   }, [show]);
   return (
     <div>
-      <button className="floatbutton" onClick={() => setShow(true)} style={{position:"absolute",right:25,bottom:25}}>
+      <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 25, bottom: 25}}>
         <i className="fa fa-pencil-square"></i>
         <span>Program</span>
       </button>
@@ -76,7 +76,7 @@ function CreateNewCourse() {
   }, [show]);
   return (
     <div>
-      <button className="floatbutton" onClick={() => setShow(true)} style={{position:"absolute",right:100,bottom:25}}>
+      <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 100, bottom: 25}}>
         <i className="fa fa-plus-square"></i>Course
       </button>
       <Modal show={show} onHide={() => setShow(false)}>
@@ -120,7 +120,7 @@ function CreateNewCourse() {
   );
 }
 
-function CourseCard(){
+function CourseCard() {
   const { courses } = useContext(ClassroomContext);
   if (courses.length === 0) {
     return (<div>No courses available.</div>);
@@ -188,5 +188,5 @@ const CourseSpan = styled.span`
   color: grey;
   font-size: 10px;
   float: right;
-  margin-top:12px;
+  margin-top: 12px;
 `;

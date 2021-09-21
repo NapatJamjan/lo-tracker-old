@@ -9,38 +9,39 @@ type LearningOutcomeMap = Map<ID, LearningOutcome>;
 
 interface LearningOutcome {
   title: string,
-  subLO: LearningOutcomeMap
-  depth:number
+  subLO: LearningOutcomeMap,
+  depth: number
 }
 
 export const PLOScreen: React.FC = () => {
+  const { los } = useContext(LOContext)
   const PLOs: LearningOutcomeMap = new Map([
     ["ab201ksdn1", {
       title: "PLO1 Programming Knowledge", 
       subLO: new Map([
-        ["ab201ksdo1", {title: "LO1 : Basic Java", subLO: new Map([
-          ["ab201ksep1", {title: "Level1 Hello World", subLO: new Map(),depth:2}],
-          ["ab201ksfp1", {title: "Level2 Conditional and Loop", subLO: new Map(),depth:2}],
-        ]),depth:1}],
+        ["ab201ksdo1", {title: los[0].name, subLO: new Map([
+          ["ab201ksep1", {title: los[0].level[0], subLO: new Map(), depth: 2}],
+          ["ab201ksfp1", {title: los[0].level[1], subLO: new Map(), depth: 2}],
+        ]), depth: 1}],
         ["ab201ksdp1", {title: "LO2 : C#", subLO: new Map([
           ["ab201ksep1", {title: "Level1", subLO: new Map()}],
           ["ab201ksfp1", {title: "Level2", subLO: new Map()}],
           ["ab201ksgp1", {title: "Level3", subLO: new Map()}],
-        ]),depth:1}],
-        ["ab201ksdq1", {title: "LO3 : Python Programming", subLO: new Map(),depth:1}]
-      ]),depth:0}],
-    ["ab201ksdn2", {title: "PLO2", subLO: new Map(),depth:0}],
+        ]), depth: 1}],
+        ["ab201ksdq1", {title: "LO3 : Python Programming", subLO: new Map(), depth: 1}]
+      ]), depth: 0}],
+    ["ab201ksdn2", {title: "PLO2", subLO: new Map(), depth: 0}],
     ["ab201ksdn3", {title: "PLO3", subLO: new Map([
-      ["ab201ksdo3", {title: "LO1", subLO: new Map(),depth:1}]
-    ]),depth:0}],
+      ["ab201ksdo3", {title: "LO1", subLO: new Map(), depth: 1}]
+    ]), depth: 0}],
   ]);
   return (
-    <div >
+    <div>
       <h3>Learning Outcome</h3>
-      <div style={{width:775,marginLeft:10}}>
-      <RecursiveCollapseList data={PLOs} ></RecursiveCollapseList>
-      <EditIcon><i className="fa fa-plus-circle" style={{fontSize:28,marginTop:10}}></i></EditIcon>
-      <ManageLO/>
+      <div style={{width: 775, marginLeft: 10}}>
+        <RecursiveCollapseList data={PLOs} ></RecursiveCollapseList>
+        <EditIcon><i className="fa fa-plus-circle" style={{fontSize: 28, marginTop: 10}}></i></EditIcon>
+        <ManageLO/>
       </div>
     </div>
   );
@@ -67,7 +68,7 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
                 {data.get(id)?.title}
               </Quizlist>
               <Collapse in={open[index]}>
-                <div style={{marginLeft:30}}>
+                <div style={{marginLeft: 30}}>
                   <RecursiveCollapseList data={data.get(id)?.subLO ?? new Map()}></RecursiveCollapseList>
                 </div>
               </Collapse>
@@ -82,33 +83,34 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
 function ManageLO(){
   const [show,setShow] = useState(false);
   return(<div>
-    <button className="floatbutton" onClick={()=>{setShow(true)}} style={{position:"absolute",right:25,bottom:25}}>
-      <b style={{fontSize:14}}>LO</b> <span>Manage</span>
+    <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 25, bottom: 25}}>
+      <b style={{fontSize: 14}}>LO</b> <span>Manage</span>
     </button>
-  <Modal show={show} onHide={()=>{setShow(false)}}>
-    <ModalHeader >
-      <ModalTitle>Manage Learning Outcome</ModalTitle>
-    </ModalHeader>
-    <ModalBody>
-      <form>
-        <LOCard/>
-        <p style={{marginBottom:25}}><RightButton className="fa fa-plus-circle"></RightButton></p>
-      </form>
-    </ModalBody>
-    <ModalFooter>
-      <Button variant="primary" onClick={()=>{setShow(false)}}>Save</Button>
-    </ModalFooter>
-  </Modal>
+    <Modal show={show} onHide={() => setShow(false)}>
+      <ModalHeader >
+        <ModalTitle>Manage Learning Outcome</ModalTitle>
+      </ModalHeader>
+      <ModalBody>
+        <form>
+          <LOCard/>
+          <p style={{marginBottom: 25}}><RightButton className="fa fa-plus-circle"></RightButton></p>
+        </form>
+      </ModalBody>
+      <ModalFooter>
+        <Button variant="primary" onClick={() => setShow(false)}>Save</Button>
+      </ModalFooter>
+    </Modal>
   </div>
   )
 }
 
 function LOCard(props:any){
-  const {los} = useContext(LOContext)
+  const { los } = useContext(LOContext)
   const [ open, _setOpen ] = useState<Array<Array<boolean>>>(los.map(lo => { 
-    return Array.from({length: lo.level.length + 1}, () => false);}));
+    return Array.from({length: lo.level.length + 1}, () => false);
+  }));
   useEffect(() => {
-    open.push(Array.from({length:los[los.length-1].level.length+1}, () => false))
+    open.push(Array.from({length: los[los.length-1].level.length+1}, () => false))
   }, [los]);
   function toggle(row: number, col: number) {
     open[row][col] = !open[row][col];
@@ -117,33 +119,35 @@ function LOCard(props:any){
   return (
     <div>
       {los.map((lo, row) => (
-          <CardDiv key={`row-${row}`}>
-            <div style={{display:"flex"}}>
-            <i className="fa fa-angle-down" onClick={() => toggle(row, 0)} style={{fontSize:28}}></i>
-            <h5 style={{marginBottom:3,paddingRight:5}} contentEditable="true">
+        <CardDiv key={`row-${row}`}>
+          <div style={{ display: "flex" }}>
+            <i className="fa fa-angle-down" onClick={() => toggle(row, 0)} style={{ fontSize: 28 }}></i>
+            <h5 style={{marginBottom: 3, paddingRight: 5}} contentEditable="true">
               {lo.name}
             </h5>
             <RightButton className="fa fa-window-close-o"></RightButton>
-            </div>
-            <Collapse in={open[row][0]}>{
-              <div style={{marginLeft:28}}>
-                {lo.level.map((lvl, col) => (
-                  <div key={`row-${row}-col-${col}`}>
-                    <div style={{display:"flex"}}>
-                    <p onClick={() => toggle(row, col + 1)} style={{marginBottom:-3,paddingRight:5}} contentEditable="true">
+          </div>
+          <Collapse in={open[row][0]}>{
+            <div style={{ marginLeft: 28 }}>
+              {lo.level.map((lvl, col) => (
+                <div key={`row-${row}-col-${col}`}>
+                  <div style={{display: "flex"}}>
+                    <p onClick={() => toggle(row, col + 1)} style={{marginBottom: -3, paddingRight: 5}} contentEditable="true"
+                      onInput={() => { console.log(lvl) }} >
                       {lvl}
-                    </p>   
+                    </p>
                     <LevelRightButton className="fa fa-window-close-o" ></LevelRightButton>
-                    </div>
                   </div>
-                ))}
+                </div>
+              ))}
               <p><LevelRightButton className="fa fa-plus-circle"></LevelRightButton></p>
-              </div>
-            }</Collapse>
-          </CardDiv>
-        ))}
+            </div>
+          }</Collapse>
+        </CardDiv>
+      ))}
     </div>
-)}
+  )
+}
 
 //MangeLO
 const CardDiv = styled.div`

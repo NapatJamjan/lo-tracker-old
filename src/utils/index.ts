@@ -1,16 +1,16 @@
 import XLSX from 'xlsx';
 
-interface ExcelColumn{
-  Question:string;
-  MaxScore:number;
+interface ExcelColumn {
+  Question: string;
+  MaxScore: number;
 }
 
-export let QuestionArray:Array<string> = []
+export let QuestionArray: Array<string> = []
 
 export function interpretExcel(fileUpload: HTMLInputElement) {
     const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
     if (regex.test(fileUpload.value.toLowerCase())) {
-      let fileName = fileUpload.files![0].name; 
+      // let fileName = fileUpload.files![0].name; 
       if (typeof (FileReader) !== 'undefined') {
         const reader = new FileReader();
         if (reader.readAsBinaryString) {
@@ -27,7 +27,7 @@ export function interpretExcel(fileUpload: HTMLInputElement) {
     }
 };
 
-function processExcel(data:any) {
+function processExcel(data: any) {
   const workbook = XLSX.read(data, {type: 'binary'});
   const firstSheet = workbook.SheetNames[0];
   const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
