@@ -3,7 +3,7 @@ import { Button, Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'rea
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { LOContext } from '../../shared/lo';
+import { LOContext, LODetail } from '../../shared/lo';
 import { EditIcon, Quizlist } from './Quiz';
 type ID = string;
 type LearningOutcomeMap = Map<ID, LearningOutcome>;
@@ -80,15 +80,15 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
   );
 }
 
-//Manage LO
+//Manage LO, create update delete lo and its level
 function ManageLO(){
-  const [show,setShow] = useState(false);
-  const { register, handleSubmit, setValue } = useForm<{fileName: string, fileType: string}>();
+  const [show, setShow] = useState(false);
+  const { register, handleSubmit, setValue } = useForm<{loDetail: LODetail, fileType: string}>();
   const { los } = useContext(LOContext)
-  const [ open, _setOpen ] = useState<Array<Array<boolean>>>(los.map(lo => { 
+  const [open, _setOpen] = useState<Array<Array<boolean>>>(los.map(lo => { 
     return Array.from({length: lo.level.length + 1}, () => false);
   }));
-  
+  const [loDetail, _setDetail] = useState(los)
 
   useEffect(() => {
     open.push(Array.from({length: los[los.length-1].level.length+1}, () => false))
@@ -97,7 +97,7 @@ function ManageLO(){
     open[row][col] = !open[row][col];
     _setOpen(open.slice());
   }
-
+  function handleChange(e:any){_setDetail(e.target.value)}
   return(<div>
     <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 25, bottom: 25}}>
       <b style={{fontSize: 14}}>LO</b> <span>Manage</span>
@@ -107,13 +107,13 @@ function ManageLO(){
       <ModalHeader>
         <ModalTitle>Manage Learning Outcome</ModalTitle>
       </ModalHeader>
-      <ModalBody>
+        <ModalBody>
           <div>
             {los.map((lo, row) => (
               <CardDiv key={`row-${row}`}>
-                <div style={{ display: "flex" }}>
+                <div style={{display: "flex"}}>
                   <i className="fa fa-angle-down" onClick={() => toggle(row, 0)} style={{fontSize: 28}}></i>
-                  <LOEdit style={{marginBottom: 3, paddingRight: 5}} defaultValue={lo.name}/>
+                  <LOEdit style={{marginBottom: 3, paddingRight: 5}} defaultValue={lo.name} key={`lo` + lo.id}/>
                   <RightButton className="fa fa-window-close-o"></RightButton>
                 </div>
                 <Collapse in={open[row][0]}>{
@@ -121,7 +121,8 @@ function ManageLO(){
                     {lo.level.map((lvl, col) => (
                       <div key={`row-${row}-col-${col}`}>
                         <div style={{display: "flex"}}>
-                          <LOEdit onClick={() => toggle(row, col + 1)} style={{marginBottom: -3, paddingRight: 5}} defaultValue={lvl}/>
+                          <LOEdit onClick={() => toggle(row, col + 1)} style={{marginBottom: -3, paddingRight: 5}}
+                            defaultValue={lvl}/>
                           <LevelRightButton className="fa fa-window-close-o" ></LevelRightButton>
                         </div>
                       </div>
@@ -133,8 +134,8 @@ function ManageLO(){
             ))}
           </div>
 
-          <p style={{marginBottom: 25}}><RightButton className="fa fa-plus-circle"></RightButton></p>
-      </ModalBody>
+          <p style={{ marginBottom: 25 }}><RightButton className="fa fa-plus-circle"></RightButton></p>
+        </ModalBody>
       <ModalFooter>
         <Button variant="primary" onClick={() => setShow(false)}>Save</Button>
       </ModalFooter>
@@ -171,4 +172,5 @@ const LOEdit = styled.input.attrs({
 })`
   border: none;
   background: transparent;
+  width:90%;
 `;

@@ -6,7 +6,6 @@ export interface LODetail {
     level: Array<string>;
 };
 
-
 interface LOContent{
     los: Array<LODetail>;
     addLo:(loDetail: Omit<LODetail, 'id'>) => void;

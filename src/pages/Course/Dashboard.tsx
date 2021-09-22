@@ -54,6 +54,7 @@ export function ExportOutcome(){
   const [ check, _setCheck ] = useState<Array<boolean>>(
     Array.from({length: students.length+1}, () => false)
   );
+  
   useEffect(() => {
     if (!show) {
       _setCheck(Array.from({ length: students.length + 1 }, () => false));
@@ -71,6 +72,7 @@ export function ExportOutcome(){
     }
     _setCheck(check.slice());
   }
+
   return(
     <div style={{display: "inline", position: "absolute", right: 50}}>
       <button onClick={() => setShow(true)}>Export Outcome</button>

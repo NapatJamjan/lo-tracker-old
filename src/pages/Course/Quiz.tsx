@@ -3,7 +3,7 @@ import { Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-boots
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { QuizContext } from '../../shared/quiz';
+import { LinkedLO, QuestionDetail, QuizContext } from '../../shared/quiz';
 import { clearExcel, interpretExcel, QuestionArray } from '../../utils';
 
 export const QuizScreen: React.FC = () => {
@@ -35,12 +35,22 @@ export const QuizScreen: React.FC = () => {
                     <div key={`row-${row}-col-${col}`}>
                       <EditIcon><i className="fa fa-pencil"></i></EditIcon>
                       <Quizlist onClick={() => toggle(row, col + 1)}>
-                        {question}
+                        {question.name}
                       </Quizlist>
                       <Collapse in={open[row][col + 1]}>
                         <Question style={{marginLeft: 30}}>
-                          <p>Max Score 5</p>
-                          <p style={{fontWeight: "bolder"}}>Linked LO: LO1(1) LO2(2,3) LO3(1)</p>
+                          <p>Max Score {question.maxscore}</p>
+                          {/* <p style={{fontWeight: "bolder"}}>Linked LO: LO1(1) LO2(2,3) LO3(1)</p> */}
+                          <p style={{fontWeight: "bolder"}}>
+                            Linked LO: {question.linkedLO.map((lolvl) => (
+                              <span>LO{lolvl.loID}<span>(
+                                {lolvl.lvl.map((lv) => (
+                                  <span>{lv} </span>
+                                ))}
+                                )</span> 
+                              </span>
+                            ))}
+                          </p>
                         </Question>
                       </Collapse>
                     </div>
@@ -59,7 +69,7 @@ export const QuizScreen: React.FC = () => {
 function ImportExcelToCourse(props: any){
   const { addQuiz } = useContext(QuizContext)
   const [show, setShow] = useState(false);
-  const { register, handleSubmit, setValue } = useForm<{name: string, question: Array<string>}>();
+  const { register, handleSubmit, setValue } = useForm<{name: string, question: Array<QuestionDetail>}>();
   useEffect(() => {
     if (!show) setValue('name', '');
   }, [show]);
@@ -71,7 +81,7 @@ function ImportExcelToCourse(props: any){
       <Modal show={show} onHide={() => setShow(false)}>
         <form onSubmit={handleSubmit((data) => {
           if (QuestionArray.length == 0) {
-            QuestionArray.push("No question imported");
+            QuestionArray.push({name: "No question imported", maxscore: 0, linkedLO: []});
           }
           data.question = QuestionArray;
           addQuiz(data);

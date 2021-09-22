@@ -3,7 +3,18 @@ import React, { createContext, useState } from 'react';
 interface QuizDetail {
     id: string;
     name: string;
-    question: Array<string>;
+    question: Array<QuestionDetail>;
+}
+
+export interface QuestionDetail {
+    name: string;
+    maxscore: number;
+    linkedLO: Array<LinkedLO>;
+}
+
+export interface LinkedLO {
+    loID: string;
+    lvl: Array<number>;
 }
 
 interface QuizContent{
@@ -23,9 +34,16 @@ interface QuizState{
 export const QuizProvider:React.FC = ({children}) =>{   
     const [quiz,setQuiz] = useState<QuizState>({quizzes:[
         {id: "0", name:"Quiz 1 : Tutorial Quiz",
-        question: ['Question 1 Test question', 'Question 2 What is Computer Science about?', 'Question 3 How to ']},
+        question: [{name: 'Question 1 Test Question', maxscore: 10, linkedLO: [{loID:'1',lvl:[1,2]}]} ,
+            {name: 'Question 2 What is Computer Science about?', maxscore: 5, linkedLO: []}, 
+            {name: 'Question 3 How to write a program?', maxscore: 10, linkedLO: [{loID:'1',lvl:[1,2]},{loID:'2',lvl:[3]}]}],
+        },
         {id: "1", name: "Quiz 2 : Tutorial Quiz 2",
-        question: ['Question 1 Test question 2', 'Question 2 What is a quiz', 'Question 3 How to ', 'Question 4 a']}]});
+        question:[{name: 'Question 1 Test Question2', maxscore: 10, linkedLO: []} ,
+            {name: 'Question 2 How to print Hello World in python', maxscore: 5, linkedLO: [{loID:'0',lvl:[1]}]}, 
+            {name: 'Question 3 How to ', maxscore: 1, linkedLO: []}],
+        }
+    ]});
     const {quizzes} = quiz;
     const addQuiz = ({name, question}: Omit<QuizDetail, 'id'>) =>{
         setQuiz({
@@ -33,7 +51,7 @@ export const QuizProvider:React.FC = ({children}) =>{
             quizzes:[...quiz.quizzes, {
                 id: `${quiz.quizzes.length+1}`,
                 name,
-                question
+                question, 
             }]
         })
     };

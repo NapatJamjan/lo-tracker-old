@@ -1,12 +1,14 @@
 import XLSX from 'xlsx';
 import { students } from '../pages/Course/Student';
+import { QuestionDetail } from '../shared/quiz';
 
 interface ExcelColumn {
   Question: string;
   MaxScore: number;
 }
 
-export let QuestionArray: Array<string> = []
+let ImportedQuestion: Array<ExcelColumn> = []
+export let QuestionArray: Array<QuestionDetail> = []
 
 export function interpretExcel(fileUpload: HTMLInputElement) {
     const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
@@ -32,18 +34,34 @@ function processExcel(data: any) {
   const workbook = XLSX.read(data, {type: 'binary'});
   const firstSheet = workbook.SheetNames[0];
   const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
-  console.log(excelRows);
   for (let i = 0; i < excelRows.length; i++) {
-    QuestionArray.push((excelRows[i] as ExcelColumn).Question);
+    ImportedQuestion.push({Question:((excelRows[i] as ExcelColumn).Question),
+      MaxScore:((excelRows[i] as ExcelColumn).MaxScore)});
   }
-  QuestionArray = QuestionArray.filter((x, i, a) => a.indexOf(x) === i)//filter dupe
-  for (let i = 0; i < QuestionArray.length; i++) { // add question no.
-    QuestionArray[i] = ("Question "+(i+1)+": "+QuestionArray[i])
+  // ImportedQuestion = ImportedQuestion.filter((x, i, a) => a.indexOf(x) === i)//filter dupe
+  ImportedQuestion = getUnique(ImportedQuestion, 'Question');
+  for (let i = 0; i < ImportedQuestion.length; i++) { // add question no.
+    QuestionArray[i] = ({
+      name: "Question " + (i + 1) + ": " + ImportedQuestion[i].Question, 
+      maxscore: ImportedQuestion[i].MaxScore, linkedLO: []
+    })
   }
 }
 
 export function clearExcel() {
   QuestionArray = [];
+}
+
+function getUnique(array:any[], key:any) {
+  if (typeof key !== 'function') {
+    const property = key;
+    key = function(item:any) { return item[property]; };
+  }
+  return Array.from(array.reduce(function(map, item) {
+    const k = key(item);
+    if (!map.has(k)) map.set(k, item);
+    return map;
+  }, new Map()).values()) as Array<ExcelColumn>;
 }
 
 //Excel writinh

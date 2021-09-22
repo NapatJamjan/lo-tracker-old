@@ -45,7 +45,7 @@ export function ScoreTable (props: {score: Array<any>, tablehead: Array<string>,
               <tr>
                 <td><LinkedCol to={`dashboard/${std.id}`}>{std.mail}</LinkedCol></td>
                 <td><LinkedCol to={`dashboard/${std.id}`}>{std.name}</LinkedCol></td>
-                {props.score.map(scores =>(
+                {props.score.map(scores =>( // map score of this student's id
                   <Overlay score={scores.score} detail={[scores.detail]}/>
                 ))}
               </tr>)) || tableHeadInfo.map(qi => ( //individual page
