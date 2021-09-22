@@ -2,6 +2,7 @@ import { AnyRecord } from 'dns';
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { ExportOutcome } from '../Dashboard';
 import { students } from '../Student';
 import { quizscore, PLOscore, ScoreTable } from './Table';
 
@@ -54,11 +55,11 @@ function OutcomeScore() {
   )
 }
 
-function ExportOutcome() {
-  return (
-    <button style={{ position: "absolute", right: 50 }}>Export Outcome</button>
-  )
-}
+// function ExportOutcome() {
+//   return (
+//     <button style={{ position: "absolute", right: 50 }}>Export Outcome</button>
+//   )
+// }
   
 const MainDiv = styled.div`
   margin: 1.5%;

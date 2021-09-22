@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 
-interface LODetail {
+export interface LODetail {
     id: string;
     name: string;
     level: Array<string>;

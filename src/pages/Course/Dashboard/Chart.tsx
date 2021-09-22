@@ -24,10 +24,10 @@ function PloChart(props:any){
   return(
     <div style={{position: "absolute", right: "1%", width: "40%", height: "50%", marginTop: "0.5%"}}>
       <select value={chartType} style={{float: "right"}} onChange={handleChange}>
-        <option value="TPLO" onClick={() => setType("TPLO")}>Total PLO%</option>
-        <option value="TLO" onClick={() => setType("TLO")}>Total LO%</option>
-        <option value="Test" onClick={() => setType("TLO")}>Test Graph</option>
-      </select><br />
+        <option value="TPLO">Total PLO%</option>
+        <option value="TLO">Total LO%</option>
+        <option value="Test">Test Graph</option>
+      </select><br/>
       {chartType === "TPLO" && <ChartBar dataArray={data}/>}
       {chartType === "TLO" && <ChartLine/>}
       {chartType === "Test" && <ChartTest/>}
@@ -41,10 +41,10 @@ function QuizChart(props: any) {
   const [chartType, setType] = useState("Score");
   function handleChange(e: any) { setType(e.target.value) }
   return (
-    <div style={{ position: "absolute", right: "1%", width: "40%", height: "50%", marginTop: "0.5%" }}>
-      <select value={chartType} style={{ float: "right" }} onChange={handleChange}>
-        <option value="Score" onClick={() => setType("Score")}>Score</option>
-        <option value="Average" onClick={() => setType("Average")}>Average Score</option>
+    <div style={{position: "absolute", right: "1%", width: "40%", height: "50%", marginTop: "0.5%"}}>
+      <select value={chartType} style={{float: "right"}} onChange={handleChange}>
+        <option value="Score">Score</option>
+        <option value="Average">Average Score</option>
       </select><br />
       {chartType === "Score" && <ChartBar dataArray={data}/>}
       {chartType === "Average" && <ChartLine/>}
@@ -56,12 +56,12 @@ function ChartBar(props: { dataArray: Array<chartdata> }) {
   return (
     <ResponsiveContainer>
       <BarChart data={props.dataArray} width={600} height={300}>
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="3 3"/>
         <XAxis dataKey="name"/>
-        <YAxis type="number" domain={[0, 100]} />
+        <YAxis type="number" domain={[0, 100]}/>
         <Tooltip/>
         <Legend/>
-        <Bar dataKey="score" fill="green" />
+        <Bar dataKey="score" fill="green"/>
       </BarChart>
     </ResponsiveContainer>
   )

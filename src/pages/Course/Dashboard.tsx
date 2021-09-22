@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { exportExcel } from '../../utils';
 import { quizscore, PLOscore, ScoreTable } from './Dashboard/Table';
 import { students } from './Student';
 
@@ -37,7 +39,7 @@ function OutcomeScore(){
   const PLOs: Array<PLOscore> = [{id: 1, score: "100%", detail: "LO1 100% \n LO2 100% \n LO3 100%"},
   {id: 2, score: "80%", detail: "LO1 100% \n LO2 100% \n LO3 100%"}, {id: 3, score: "-", detail: "No score"},
   {id: 4, score: "-", detail: "No score"}]
-  const PLOHead: Array<string> = ['Email','Name']
+  const PLOHead: Array<string> = ['Email', 'Name']
   for (let i = 0; i < PLOs.length; i++) { //count unique plo id
     PLOHead.push('PLO'+(i+1));
   }
@@ -46,54 +48,71 @@ function OutcomeScore(){
   )
 }
 
-function ExportOutcome(){
-  const [show,setShow] = useState(false);
+export function ExportOutcome(){
+  const [show, setShow] = useState(false);
+  const { register, handleSubmit, setValue } = useForm<{fileName: string, fileType: string}>();
   const [ check, _setCheck ] = useState<Array<boolean>>(
     Array.from({length: students.length+1}, () => false)
   );
+  useEffect(() => {
+    if (!show) {
+      _setCheck(Array.from({ length: students.length + 1 }, () => false));
+      setValue('fileType', 'xlsx');
+    }
+  }, [show]);
   function handleCheck(id:number){
     check[id] = !check[id];
     _setCheck(check.slice());
   }
   function handleCheckAll(){
-    check[check.length-1] = !check[check.length-1];
+    check[check.length - 1] = !check[check.length - 1];
     for (let i = 0; i < check.length; i++) {
-      if (check[i] != check[check.length-1]) {check[i] = !check[i]};
+      if (check[i] != check[check.length - 1]) {check[i] = !check[i]};
     }
     _setCheck(check.slice());
   }
   return(
     <div style={{display: "inline", position: "absolute", right: 50}}>
       <button onClick={() => setShow(true)}>Export Outcome</button>
+
       <Modal show={show} onHide={() => setShow(false)}>
+        <form onSubmit={handleSubmit((data) => {
+          setShow(false);
+          exportExcel(check, data.fileName, data.fileType);
+        })}>
           <ModalHeader >
             <ModalTitle>Export Outcome</ModalTitle>
           </ModalHeader>
           <ModalBody>
-          <form onSubmit={() => setShow(false)}>
-            <p style={{marginBottom:0}}>Select student to export outcome data</p>
+            <p style={{ marginBottom: 0 }}>Select student to export outcome data</p>
             <OptionDiv>
-            <input type="checkbox" checked={check[check.length-1]} onClick={() => handleCheckAll()}/>
-            <label>Select All</label>
-            <select name="type" style={{float:"right"}}>
-              <option value="excel">Excel</option>
-              <option value="csv">CSV</option>
-              <option value="pdf">PDF</option>
-            </select>
-            <p style={{float:"right",paddingRight:10}}>File Type</p>
+
+              <label>File Name:</label>
+              <input type="text" {...register('fileName')} style={{transform: "scale(0.9)"}} placeholder="Outcome Result" /><br/>
+
+              <input type="checkbox" checked={check[check.length - 1]} onClick={() => handleCheckAll()}/>
+              <label>Select All</label>
+
+              <select style={{float: "right"}} {...register('fileType')}>
+                <option value={"xlsx"}>Excel</option>
+                <option value={"csv"}>CSV</option>
+                {/* <option value="pdf" onClick={() => setFileType("csv")}>PDF</option> */}
+              </select>
+
+              <p style={{float: "right", paddingRight: 10}}>File Type</p>
             </OptionDiv>
             {students.map((std) => (
               <CheckBoxDiv>
-                <input type="checkbox" name={"std"+std.id.toString()} value={check[std.id].toString()}
-                checked={check[std.id]} onClick={() => handleCheck(std.id)} readOnly/>
+                <input type="checkbox" name={"std" + std.id.toString()} value={check[std.id].toString()}
+                  checked={check[std.id]} onClick={() => handleCheck(std.id)} readOnly />
                 <label>{std.name}</label><br/>
               </CheckBoxDiv>
-            ))} </form>
+            ))}
           </ModalBody>
           <ModalFooter>
-            {/* <input type="submit" value="Export"/> */}
-            <button onClick={() => setShow(false)}>Export</button>
+            <input type="submit" value="Export"/>
           </ModalFooter>
+        </form>
       </Modal>
     </div>)
 }
