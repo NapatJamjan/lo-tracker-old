@@ -38,7 +38,6 @@ function processExcel(data: any) {
     ImportedQuestion.push({Question:((excelRows[i] as ExcelColumn).Question),
       MaxScore:((excelRows[i] as ExcelColumn).MaxScore)});
   }
-  // ImportedQuestion = ImportedQuestion.filter((x, i, a) => a.indexOf(x) === i)//filter dupe
   ImportedQuestion = getUnique(ImportedQuestion, 'Question');
   for (let i = 0; i < ImportedQuestion.length; i++) { // add question no.
     QuestionArray[i] = ({
@@ -91,7 +90,6 @@ export function exportExcel(selectedStudent: Array<boolean>, fileName: string,fi
     alert("Please select student.")
   }
 }
-
 function ec(r: any, c: any) {
   return XLSX.utils.encode_cell({r: r, c: c});
 }

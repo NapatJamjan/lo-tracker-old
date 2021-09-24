@@ -4,7 +4,7 @@ import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { LOContext, LODetail } from '../../shared/lo';
-import { EditIcon, Quizlist } from './Quiz';
+import { CardDiv, EditIcon, LeftCheckbox, Quizlist } from './Quiz';
 type ID = string;
 type LearningOutcomeMap = Map<ID, LearningOutcome>;
 
@@ -64,7 +64,7 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
       {ids.map((id, index) => {
           return (
             <div key={id} >
-              <EditIcon><i className="fa fa-pencil"></i></EditIcon>
+              {data.get(id)?.depth === 0 && <LinkLOtoPLO plo={data.get(id)?.title}/>}
               <Quizlist onClick={() => toggle(index)}>
                 {data.get(id)?.title}
               </Quizlist>
@@ -97,7 +97,7 @@ function ManageLO(){
     open[row][col] = !open[row][col];
     _setOpen(open.slice());
   }
-  function handleChange(e:any){_setDetail(e.target.value)}
+
   return(<div>
     <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 25, bottom: 25}}>
       <b style={{fontSize: 14}}>LO</b> <span>Manage</span>
@@ -145,12 +145,47 @@ function ManageLO(){
   )
 }
 
+function LinkLOtoPLO(props:any) {
+  const [show, setShow] = useState(false);
+  const { los } = useContext(LOContext)
+  return(<div>
+    <EditIcon><i className="fa fa-pencil" onClick={() => setShow(true)}></i></EditIcon>
+    <Modal show={show} onHide={() => setShow(false)}>
+    <form>
+      <ModalHeader>
+        <ModalTitle>Manage PLO</ModalTitle>
+      </ModalHeader>
+        <ModalBody>
+          <div>
+            <p style={{marginBottom:0}}>Selected PLO</p>
+            <input type="text" defaultValue={props.plo} style={{width:"75%",marginBottom:10}}/>
+            {los.map((lo) => (
+              <CardDiv >
+                <div style={{display: "flex"}}>
+                <LeftCheckbox />
+                  <h5 style={{marginBottom: 3}}>
+                    {lo.name}
+                  </h5>
+                </div>
+              </CardDiv>
+            ))}
+          </div>
+        </ModalBody>
+      <ModalFooter>
+        <Button variant="primary" onClick={() => setShow(false)}>Save</Button>
+      </ModalFooter>
+      </form>
+    </Modal>
+  </div>)
+}
 
 //MangeLO
-const CardDiv = styled.div`
-  border-bottom: grey 0.5px solid;
-  margin-bottom: 10px;
-  overflow: hidden;
+const LOEdit = styled.input.attrs({
+  type:'text'
+})`
+  border: none;
+  background: transparent;
+  width:90%;
 `;
 
 const RightButton = styled.i`
@@ -165,12 +200,4 @@ const LevelRightButton = styled.i`
   right: 19px;
   text-align: center;
   font-size: 16px;
-`;
-
-const LOEdit = styled.input.attrs({
-  type:'text'
-})`
-  border: none;
-  background: transparent;
-  width:90%;
 `;

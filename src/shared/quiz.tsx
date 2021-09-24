@@ -17,14 +17,22 @@ export interface LinkedLO {
     lvl: Array<number>;
 }
 
+interface LinkingLO {
+    los:Array<LinkedLO>;
+    quizID:string;
+    questionIndex:number;
+}
+
 interface QuizContent{
     quizzes: Array<QuizDetail>;
     addQuiz: (quizDetail: Omit<QuizDetail, 'id'>) => void;
+    linkLO: (linkingdata: Omit<LinkingLO, 'id'>) => void;
 }
 
 export const QuizContext = createContext<QuizContent>({
     quizzes:[],
-    addQuiz: () => {}
+    addQuiz: () => {},
+    linkLO: () => {}
 })
 
 interface QuizState{
@@ -55,9 +63,10 @@ export const QuizProvider:React.FC = ({children}) =>{
             }]
         })
     };
+    const linkLO = () => {}
 
     return(
-        <QuizContext.Provider value={{quizzes, addQuiz}}>
+        <QuizContext.Provider value={{quizzes, addQuiz, linkLO}}>
             {children}
         </QuizContext.Provider>
     )

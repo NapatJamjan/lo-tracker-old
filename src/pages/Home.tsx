@@ -2,9 +2,10 @@ import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Modal, ModalTitle, ModalBody, ModalFooter } from 'react-bootstrap';
+import { Modal, ModalTitle, ModalBody, ModalFooter, Collapse } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { ClassroomContext, CourseDetail } from '../shared/classroom';
+import { CardDiv } from './Course/Quiz';
 
 export default function HomeScreen() {
   return (
@@ -29,6 +30,10 @@ export default function HomeScreen() {
   );
 };
 
+interface programs{
+  title:string,plos: Array<string>
+}
+
 function CreateNewProgram() {
   const { addProgram } = useContext(ClassroomContext);
   const { register, handleSubmit, setValue } = useForm();
@@ -36,6 +41,21 @@ function CreateNewProgram() {
   useEffect(() => {
     if (!show) setValue('program', '');
   }, [show]);
+
+  const Programs:Array<programs> = [{
+      title:"Test Program 1",plos:['PLO1 : Programming Knowledge','PLO2 : Use Computer Science to ','PLO3 : a']
+    },{
+      title:"Test Program 2",plos:['PLO1 : Technologies Knowledge','PLO2 : Internet Adaption','PLO3 : ']
+    },
+  ]
+  const [ open, _setOpen ] = useState<Array<boolean>>(
+    Array.from({length: Programs.length+1}, () => false)
+  );
+  function toggle(row: number) {
+    open[row]= !open[row];
+    _setOpen(open.slice());
+  }
+
   return (
     <div>
       <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 25, bottom: 25}}>
@@ -43,18 +63,40 @@ function CreateNewProgram() {
         <span>Program</span>
       </button>
       <Modal show={show} onHide={() => setShow(false)}>
-        <form onSubmit={handleSubmit((data) => {addProgram(data.program); setShow(false);})}>
+        <form onSubmit={handleSubmit((data) => {
+          if(data.program != "") {addProgram(data.program); }
+          setShow(false);})}>
           <ModalHeader>
             <ModalTitle>
               <span>Manage Program</span>
             </ModalTitle>
           </ModalHeader>
           <ModalBody>
-            <span>Program name:</span><br/>
+            {/* Mock Up programs */}
+            {Programs.map((pro, row) => (
+              <CardDiv>
+                <div style={{display: "flex"}}>
+                  <h5 style={{marginBottom: 3, paddingRight: 5}} onClick={() => toggle(row)}>
+                    {pro.title}
+                  </h5>
+                  <RightButton className="fa fa-pencil"></RightButton>
+                </div>
+                <Collapse in={open[row]}>
+                  <div style={{marginLeft: 15}}>
+                    {pro.plos.map((plo) => (
+                      <div>{plo}</div>
+                    ))}
+                  </div>
+                </Collapse>
+              </CardDiv>
+            ))}
+          {/* mock up end */}
+
+            <span>Add a new program:</span><br/>
             <input type="text" {...register('program')}/>
           </ModalBody>
           <ModalFooter>
-            <input type="submit" value="create"/>
+            <input type="submit" value="Save"/>
           </ModalFooter>
         </form>
       </Modal>
@@ -189,4 +231,10 @@ const CourseSpan = styled.span`
   font-size: 10px;
   float: right;
   margin-top: 12px;
+`;
+
+const RightButton = styled.i`
+  position: absolute;
+  right: 20px;
+  font-size: 20px;
 `;

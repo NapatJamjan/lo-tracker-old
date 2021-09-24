@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
+import { Button, Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { LOContext } from '../../shared/lo';
 import { LinkedLO, QuestionDetail, QuizContext } from '../../shared/quiz';
 import { clearExcel, interpretExcel, QuestionArray } from '../../utils';
 
@@ -24,7 +25,7 @@ export const QuizScreen: React.FC = () => {
       {
         quizzes.map((quiz, row) => (
           <Quizcard key={`row-${row}`} >
-            <EditIcon><i className="fa fa-pencil"></i></EditIcon>
+            <LinkLOButton quiz={quiz.id} question={-1}/>
             <Quizlist onClick={() => toggle(row, 0)}>
               {quiz.name}
             </Quizlist>
@@ -33,21 +34,20 @@ export const QuizScreen: React.FC = () => {
                 <div style={{marginLeft: 30}}>
                   {quiz.question.map((question, col) => (
                     <div key={`row-${row}-col-${col}`}>
-                      <EditIcon><i className="fa fa-pencil"></i></EditIcon>
+                      <LinkLOButton quiz={quiz.id} question={col}/>
                       <Quizlist onClick={() => toggle(row, col + 1)}>
                         {question.name}
                       </Quizlist>
                       <Collapse in={open[row][col + 1]}>
                         <Question style={{marginLeft: 30}}>
                           <p>Max Score {question.maxscore}</p>
-                          {/* <p style={{fontWeight: "bolder"}}>Linked LO: LO1(1) LO2(2,3) LO3(1)</p> */}
                           <p style={{fontWeight: "bolder"}}>
                             Linked LO: {question.linkedLO.map((lolvl) => (
                               <span>LO{lolvl.loID}<span>(
                                 {lolvl.lvl.map((lv) => (
                                   <span>{lv} </span>
                                 ))}
-                                )</span> 
+                                ) </span> 
                               </span>
                             ))}
                           </p>
@@ -75,12 +75,12 @@ function ImportExcelToCourse(props: any){
   }, [show]);
   return(
     <div>
-      <button className="floatbutton" onClick = {() => setShow(true)} style = {{position: "absolute", right: 25, bottom:25}}>
+      <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 25, bottom: 25}}>
         <i className="fa fa-download"></i>Import
       </button>
       <Modal show={show} onHide={() => setShow(false)}>
         <form onSubmit={handleSubmit((data) => {
-          if (QuestionArray.length == 0) {
+          if (QuestionArray.length === 0) {
             QuestionArray.push({name: "No question imported", maxscore: 0, linkedLO: []});
           }
           data.question = QuestionArray;
@@ -122,6 +122,106 @@ function Upload(){
   interpretExcel(fileUpload);
 }
 
+function LinkLOButton(props: any){
+  const [show, setShow] = useState(false);
+  const { los } = useContext(LOContext)
+  const [open, _setOpen] = useState<Array<Array<boolean>>>(los.map(lo => { 
+    return Array.from({length: lo.level.length + 1}, () => false);
+  }));
+  function toggle(row: number, col: number) {
+    open[row][col] = !open[row][col];
+    _setOpen(open.slice());
+  }
+  const [check, _setCheck] = useState<Array<Array<boolean>>>(los.map(lo => { 
+    return Array.from({length: lo.level.length + 1}, () => false);
+  }));
+  function handleCheck(row: number, col: number) {
+    check[row][col] = !check[row][col];
+    if (check[row][0] == true) { check[row][0] = false;}
+    _setCheck(check.slice());
+  }
+  function handleCheckAll(row: number) {
+    check[row][0] = !check[row][0];
+    for (let i = 1; i < check[row].length; i++) {
+      if (check[row][i] != check[row][0]) {check[row][i] = !check[row][i];}
+    }
+    _setCheck(check.slice());
+  }
+
+  return(<div>
+    <EditIcon><i className="fa fa-pencil" onClick={() => setShow(true)}></i></EditIcon>
+    <Modal show={show} onHide={() => setShow(false)}>
+    <form>
+      <ModalHeader>
+        <ModalTitle>Link learning outcome to question</ModalTitle>
+      </ModalHeader>
+        <ModalBody>
+          <div>
+            <p>Quiz {parseInt(props.quiz) + 1} 
+              {props.question === -1 && <span></span> || <span> Question {props.question + 1}</span>}</p>
+            {los.map((lo, row) => (
+              <CardDiv key={`row-${row}`}>
+                <div style={{display: "flex"}}>
+                  <LeftCheckbox type="checkbox" checked={check[row][0]} onClick={() => handleCheckAll(row)} readOnly/>
+                  <h5 style={{marginBottom: 3, paddingRight: 5}} onClick={() => toggle(row, 0)} key={`lo` + lo.id}>
+                    {lo.name}
+                  </h5>
+                </div>
+                <Collapse in={open[row][0]}>{
+                  <div style={{marginLeft: 28}}>
+                    {lo.level.map((lvl, col) => (
+                      <div key={`row-${row}-col-${col}`}>
+                        <div style={{display: "flex"}}>
+                        <LeftCheckbox type="checkbox" checked={check[row][col + 1]} 
+                          onClick={() => handleCheck(row, col + 1)} readOnly/>
+                          <p style={{marginBottom: -3, paddingRight: 5}}>
+                            {lvl}  
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                }</Collapse>
+              </CardDiv>
+            ))}
+          </div>
+        </ModalBody>
+      <ModalFooter>
+        <Button variant="primary" onClick={() => {setShow(false); ProcessLOLink(check);
+        }}>Save</Button>
+      </ModalFooter>
+      </form>
+    </Modal>
+  </div>
+  )
+}
+
+function ProcessLOLink(loCheck:Array<Array<boolean>>){
+  let linker:Array<LinkedLO> = [];
+  for (let i = 0; i < loCheck.length; i++) {
+    linker.push({loID:"",lvl:[]})
+    if(loCheck[i][0] == true){
+      linker[i].loID = (i+1).toString();
+      for (let j = 1; j < loCheck[i].length; j++) {
+        linker[i].lvl.push(j);
+      }
+    }
+    else{
+      for (let k = 1; k < loCheck[i].length; k++) {
+        if(loCheck[i][k] == true){
+          linker[i].loID = (i+1).toString();
+          linker[i].lvl.push(k);
+        }
+      } 
+    }
+  }
+  for (let i = 0; i < linker.length; i++) {
+    if(linker[i].loID == "") {linker.splice(i,1);}
+  }
+  console.log(linker);
+  return linker; // ready to be added to question i think
+}
+
 export const Quizcard = styled.div`
   width: 50%;
   padding-bottom: 20px;
@@ -154,4 +254,21 @@ export const Question = styled.div`
   p{
     margin-bottom: 0px;
   }
+`;
+
+// Link LO
+export const CardDiv = styled.div`
+  border-bottom: grey 0.5px solid;
+  margin-bottom: 10px;
+  overflow: hidden;
+`;
+
+export const LeftCheckbox = styled.input.attrs({
+  type:'checkbox'
+})`
+  transform:scale(1.5);
+  margin-left:5px;
+  margin-top:auto;
+  margin-bottom:auto;
+  margin-right:10px;
 `;
