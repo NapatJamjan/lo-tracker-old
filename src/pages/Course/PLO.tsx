@@ -91,7 +91,7 @@ function ManageLO(){
   const [loDetail, _setDetail] = useState(los)
 
   useEffect(() => {
-    open.push(Array.from({length: los[los.length-1].level.length+1}, () => false))
+    open.push(Array.from({length: los[los.length-1].level.length + 1}, () => false))
   }, [los]);
   function toggle(row: number, col: number) {
     open[row][col] = !open[row][col];
@@ -157,15 +157,15 @@ function LinkLOtoPLO(props:any) {
       </ModalHeader>
         <ModalBody>
           <div>
-            <p style={{marginBottom:0}}>Selected PLO</p>
-            <input type="text" defaultValue={props.plo} style={{width:"75%",marginBottom:10}}/>
+            <p style={{marginBottom: 0}}>Selected PLO (edit title here)</p>
+            <input type="text" defaultValue={props.plo} style={{width: "75%", marginBottom: 10}}/>
             {los.map((lo) => (
-              <CardDiv >
+              <CardDiv style={{border: 'none'}}>
                 <div style={{display: "flex"}}>
                 <LeftCheckbox />
-                  <h5 style={{marginBottom: 3}}>
+                  <h6 style={{marginBottom: 3}}>
                     {lo.name}
-                  </h5>
+                  </h6>
                 </div>
               </CardDiv>
             ))}
@@ -185,7 +185,7 @@ const LOEdit = styled.input.attrs({
 })`
   border: none;
   background: transparent;
-  width:90%;
+  width: 90%;
 `;
 
 const RightButton = styled.i`

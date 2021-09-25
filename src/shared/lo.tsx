@@ -26,8 +26,12 @@ interface LOState {
 
 export const LOProvider: React.FC = ({children}) => {
     const [lo, setLo] = useState<LOState>({
-        los: [{id: "0", name: "LO 1 Basic Java", level: ['Level 1 Hello World','Level 2 Conditional']},
-        {id: "1", name: "LO 2 C#", level: ['Level 1 Hello World','Level 2 If else','Level 3 Loop']}
+        los: [{id: "0", name: "LO 1 Describe and discuss fundamental data structures and the relevant algorithms", 
+            level: ['Level 1 Know what is data structures','Level 2 Algorithms']},
+        {id: "1", name: "LO 2 Describe and discuss the use of built-in data structures.", 
+            level: ['Level 1 Data Structure basic','Level 2 Various built-in DS','Level 3 How to']},
+        {id: "2", name: "LO 3 Apply knowledge of intelligent systems to the given computational problems.", 
+            level: ['Level 1 Basic AI','Level 2 Fine tuning','Level 3 Deep Learning']},
     ]});
     const {los} = lo;
     const addLo = ({name, level}: Omit<LODetail, 'id'>) => {

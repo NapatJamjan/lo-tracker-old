@@ -44,9 +44,7 @@ export const QuizScreen: React.FC = () => {
                           <p style={{fontWeight: "bolder"}}>
                             Linked LO: {question.linkedLO.map((lolvl) => (
                               <span>LO{lolvl.loID}<span>(
-                                {lolvl.lvl.map((lv) => (
-                                  <span>{lv} </span>
-                                ))}
+                                {lolvl.lvl.map((lv) => ( <span>{lv} </span> ))}
                                 ) </span> 
                               </span>
                             ))}
@@ -124,10 +122,12 @@ function Upload(){
 
 function LinkLOButton(props: any){
   const [show, setShow] = useState(false);
-  const { los } = useContext(LOContext)
+  const { los } = useContext(LOContext);
+  const { linkLO } = useContext(QuizContext);
   const [open, _setOpen] = useState<Array<Array<boolean>>>(los.map(lo => { 
     return Array.from({length: lo.level.length + 1}, () => false);
   }));
+
   function toggle(row: number, col: number) {
     open[row][col] = !open[row][col];
     _setOpen(open.slice());
@@ -135,23 +135,39 @@ function LinkLOButton(props: any){
   const [check, _setCheck] = useState<Array<Array<boolean>>>(los.map(lo => { 
     return Array.from({length: lo.level.length + 1}, () => false);
   }));
+  useEffect(() => {
+    _setCheck(los.map(lo => { return Array.from({length: lo.level.length + 1}, () => false); }));
+    _setOpen(los.map(lo => { return Array.from({length: lo.level.length + 1}, () => false); }));
+  }, [show]);
+
   function handleCheck(row: number, col: number) {
     check[row][col] = !check[row][col];
-    if (check[row][0] == true) { check[row][0] = false;}
+    if (check[row][0] === true) { check[row][0] = false;}
     _setCheck(check.slice());
   }
   function handleCheckAll(row: number) {
     check[row][0] = !check[row][0];
     for (let i = 1; i < check[row].length; i++) {
-      if (check[row][i] != check[row][0]) {check[row][i] = !check[row][i];}
+      if (check[row][i] !== check[row][0]) {check[row][i] = !check[row][i];}
     }
     _setCheck(check.slice());
   }
 
+  const { handleSubmit } = useForm<{
+    los: Array<LinkedLO>; quizID: string; questionIndex: number;
+  }>();
+
   return(<div>
     <EditIcon><i className="fa fa-pencil" onClick={() => setShow(true)}></i></EditIcon>
     <Modal show={show} onHide={() => setShow(false)}>
-    <form>
+      <form onSubmit={handleSubmit((data) => {
+        data.los = ProcessLOLink(check);
+        data.quizID = props.quiz; 
+        data.questionIndex = props.question;
+        linkLO(data); 
+        setShow(false);
+      })}>
+
       <ModalHeader>
         <ModalTitle>Link learning outcome to question</ModalTitle>
       </ModalHeader>
@@ -163,9 +179,9 @@ function LinkLOButton(props: any){
               <CardDiv key={`row-${row}`}>
                 <div style={{display: "flex"}}>
                   <LeftCheckbox type="checkbox" checked={check[row][0]} onClick={() => handleCheckAll(row)} readOnly/>
-                  <h5 style={{marginBottom: 3, paddingRight: 5}} onClick={() => toggle(row, 0)} key={`lo` + lo.id}>
+                  <h6 style={{marginBottom: 3, paddingRight: 5}} onClick={() => toggle(row, 0)} key={`lo` + lo.id}>
                     {lo.name}
-                  </h5>
+                  </h6>
                 </div>
                 <Collapse in={open[row][0]}>{
                   <div style={{marginLeft: 28}}>
@@ -187,8 +203,7 @@ function LinkLOButton(props: any){
           </div>
         </ModalBody>
       <ModalFooter>
-        <Button variant="primary" onClick={() => {setShow(false); ProcessLOLink(check);
-        }}>Save</Button>
+        <input type="submit" value="Save"/>
       </ModalFooter>
       </form>
     </Modal>
@@ -200,7 +215,7 @@ function ProcessLOLink(loCheck:Array<Array<boolean>>){
   let linker:Array<LinkedLO> = [];
   for (let i = 0; i < loCheck.length; i++) {
     linker.push({loID:"",lvl:[]})
-    if(loCheck[i][0] == true){
+    if(loCheck[i][0] === true){
       linker[i].loID = (i+1).toString();
       for (let j = 1; j < loCheck[i].length; j++) {
         linker[i].lvl.push(j);
@@ -208,7 +223,7 @@ function ProcessLOLink(loCheck:Array<Array<boolean>>){
     }
     else{
       for (let k = 1; k < loCheck[i].length; k++) {
-        if(loCheck[i][k] == true){
+        if(loCheck[i][k] === true){
           linker[i].loID = (i+1).toString();
           linker[i].lvl.push(k);
         }
@@ -216,7 +231,7 @@ function ProcessLOLink(loCheck:Array<Array<boolean>>){
     }
   }
   for (let i = 0; i < linker.length; i++) {
-    if(linker[i].loID == "") {linker.splice(i,1);}
+    if(linker[i].loID === "") {linker.splice(i, 1);}
   }
   console.log(linker);
   return linker; // ready to be added to question i think

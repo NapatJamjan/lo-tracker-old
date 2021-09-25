@@ -24,7 +24,7 @@ export default function HomeScreen() {
         </select>
       </div>
       <CourseCard/>
-      <CreateNewProgram/>
+      <ManageProgram/>
       <CreateNewCourse/>
     </div>
   );
@@ -34,26 +34,34 @@ interface programs{
   title:string,plos: Array<string>
 }
 
-function CreateNewProgram() {
+function ManageProgram() {
   const { addProgram } = useContext(ClassroomContext);
   const { register, handleSubmit, setValue } = useForm();
   const [show, setShow] = useState<boolean>(false);
+  let Programs:Array<programs> = [{
+    title:"Test Program 1",plos:['PLO1 : Programming Knowledge','PLO2 : Use Computer Science to ','PLO3 : a']
+  },{
+    title:"Test Program 2",plos:['PLO1 : Technologies Knowledge','PLO2 : Internet Adaption']
+  }]
+  const [ open, _setOpen ] = useState<Array<boolean>>(
+    Array.from({length: Programs.length + 1}, () => false)
+  );
+  function toggle(row: number) {
+    open[row]= !open[row];  
+    _setOpen(open.slice());
+  }
   useEffect(() => {
     if (!show) setValue('program', '');
   }, [show]);
 
-  const Programs:Array<programs> = [{
-      title:"Test Program 1",plos:['PLO1 : Programming Knowledge','PLO2 : Use Computer Science to ','PLO3 : a']
-    },{
-      title:"Test Program 2",plos:['PLO1 : Technologies Knowledge','PLO2 : Internet Adaption','PLO3 : ']
-    },
-  ]
-  const [ open, _setOpen ] = useState<Array<boolean>>(
-    Array.from({length: Programs.length+1}, () => false)
-  );
-  function toggle(row: number) {
-    open[row]= !open[row];
-    _setOpen(open.slice());
+  const [prog, setProg] = useState(Programs);
+  function addPLO(row: number){
+    prog[row].plos.push("New PLO")
+    setProg(prog.slice());
+  }
+  function delPLO(row: number, col: number){
+    prog[row].plos.splice(col, 1)
+    setProg(prog.slice());
   }
 
   return (
@@ -64,7 +72,7 @@ function CreateNewProgram() {
       </button>
       <Modal show={show} onHide={() => setShow(false)}>
         <form onSubmit={handleSubmit((data) => {
-          if(data.program != "") {addProgram(data.program); }
+          if(data.program !== "") {addProgram(data.program); }
           setShow(false);})}>
           <ModalHeader>
             <ModalTitle>
@@ -72,9 +80,8 @@ function CreateNewProgram() {
             </ModalTitle>
           </ModalHeader>
           <ModalBody>
-            {/* Mock Up programs */}
-            {Programs.map((pro, row) => (
-              <CardDiv>
+            {prog.map((pro, row) => (
+              <CardDiv key={`row-${row}`}>
                 <div style={{display: "flex"}}>
                   <h5 style={{marginBottom: 3, paddingRight: 5}} onClick={() => toggle(row)}>
                     {pro.title}
@@ -82,15 +89,18 @@ function CreateNewProgram() {
                   <RightButton className="fa fa-pencil"></RightButton>
                 </div>
                 <Collapse in={open[row]}>
-                  <div style={{marginLeft: 15}}>
-                    {pro.plos.map((plo) => (
-                      <div>{plo}</div>
+                  <div style={{marginLeft: 15, marginBottom: 20}}>
+                    {pro.plos.map((plo, col) => (
+                      <div key={`row-${row}-col-${col}`}>
+                        {plo}
+                        <RightButton className="fa fa-window-close-o" onClick={()=> delPLO(row, col)}></RightButton>
+                      </div>
                     ))}
+                    <RightButton className="fa fa-plus" onClick={()=> addPLO(row)}></RightButton>
                   </div>
                 </Collapse>
               </CardDiv>
             ))}
-          {/* mock up end */}
 
             <span>Add a new program:</span><br/>
             <input type="text" {...register('program')}/>
