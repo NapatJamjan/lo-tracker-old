@@ -214,9 +214,9 @@ function LinkLOButton(props: any){
 function ProcessLOLink(loCheck:Array<Array<boolean>>){
   let linker:Array<LinkedLO> = [];
   for (let i = 0; i < loCheck.length; i++) {
-    linker.push({loID:"",lvl:[]})
+    linker.push({loID: "",lvl: []})
     if(loCheck[i][0] === true){
-      linker[i].loID = (i+1).toString();
+      linker[i].loID = (i + 1).toString();
       for (let j = 1; j < loCheck[i].length; j++) {
         linker[i].lvl.push(j);
       }
@@ -224,15 +224,19 @@ function ProcessLOLink(loCheck:Array<Array<boolean>>){
     else{
       for (let k = 1; k < loCheck[i].length; k++) {
         if(loCheck[i][k] === true){
-          linker[i].loID = (i+1).toString();
+          linker[i].loID = (i + 1).toString();
           linker[i].lvl.push(k);
         }
       } 
     }
   }
   for (let i = 0; i < linker.length; i++) {
-    if(linker[i].loID === "") {linker.splice(i, 1);}
+    if(linker[i].loID === "") {
+      linker.splice(i, 1); 
+      i = i-1;
+    }
   }
+  // if(linker[0].loID === "") { linker.splice(0, 1); }
   console.log(linker);
   return linker; // ready to be added to question i think
 }

@@ -28,7 +28,9 @@ interface ClassroomState {
 };
 
 export const ClassroomProvider: React.FC = ({children}) => {
-  const [classroom, setClassroom] = useState<ClassroomState>({programs: [], courses: []});
+  const [classroom, setClassroom] = useState<ClassroomState>({programs: ['Test Program'], courses: [
+    {id: '0', program: 'Test Program', name: "Test Course", semester: 1, year: 2021}
+  ]});
   const { programs, courses } = classroom;
   const addProgram = (program: string) => setClassroom({...classroom, programs: [...classroom.programs, program]});
   const addCourse = ({program, name, semester, year }: Omit<CourseDetail, 'id'>) => {

@@ -10,7 +10,7 @@ interface LOContent{
     los: Array<LODetail>;
     addLo:(loDetail: Omit<LODetail, 'id'>) => void;
     deleteLo:() => void;
-    updateLo:() => void;
+    updateLo:(edittedLO:Array<LODetail>) => void;
 };
 
 export const LOContext = createContext<LOContent>({
@@ -45,7 +45,12 @@ export const LOProvider: React.FC = ({children}) => {
         })
     }
     const deleteLo = () => {};
-    const updateLo = () => {};
+    const updateLo = (edittedLO:Array<LODetail>) => {
+        los.splice(0,los.length)
+        los.push(...edittedLO)
+        setLo({...lo})
+        alert("Learning Outcome saved")
+    };
     return(
         <LOContext.Provider value={{los, addLo, deleteLo, updateLo}}>
             {children}

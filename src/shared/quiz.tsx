@@ -40,11 +40,11 @@ interface QuizState{
 }
 
 export const QuizProvider:React.FC = ({children}) =>{   
-    const [quiz,setQuiz] = useState<QuizState>({quizzes:[
+    const [quiz,setQuiz] = useState<QuizState>({quizzes: [
         {id: "0", name:"Quiz 1 : Tutorial Quiz",
         question: [{name: 'Question 1 Test Question', maxscore: 10, linkedLO: [{loID:' 1',lvl: [1, 2]}]} ,
             {name: 'Question 2 What is Computer Science about?', maxscore: 5, linkedLO: []}, 
-            {name: 'Question 3 How to write a program?', maxscore: 10, linkedLO: [{loID: '1',lvl: [1, 2]},{loID: '2', lvl: [3]}]}],
+            {name: 'Question 3 How to write a program?', maxscore: 10, linkedLO: [{loID: '1',lvl: [1, 2]}, {loID: '2', lvl: [3]}]}],
         },
         {id: "1", name: "Quiz 2 : Tutorial Quiz 2",
         question:[{name: 'Question 1 Test Question2', maxscore: 10, linkedLO: []} ,

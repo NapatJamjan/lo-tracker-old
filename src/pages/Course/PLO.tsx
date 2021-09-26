@@ -4,6 +4,7 @@ import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { LOContext, LODetail } from '../../shared/lo';
+import { BorderlessInput } from '../Home';
 import { CardDiv, EditIcon, LeftCheckbox, Quizlist } from './Quiz';
 type ID = string;
 type LearningOutcomeMap = Map<ID, LearningOutcome>;
@@ -83,21 +84,49 @@ const RecursiveCollapseList: React.FC<{data: LearningOutcomeMap}> = ({ data }) =
 //Manage LO, create update delete lo and its level
 function ManageLO(){
   const [show, setShow] = useState(false);
-  const { register, handleSubmit, setValue } = useForm<{loDetail: LODetail, fileType: string}>();
-  const { los } = useContext(LOContext)
+  const { los, updateLo } = useContext(LOContext)
   const [open, _setOpen] = useState<Array<Array<boolean>>>(los.map(lo => { 
     return Array.from({length: lo.level.length + 1}, () => false);
   }));
-  const [loDetail, _setDetail] = useState(los)
-
-  useEffect(() => {
-    open.push(Array.from({length: los[los.length-1].level.length + 1}, () => false))
-  }, [los]);
   function toggle(row: number, col: number) {
     open[row][col] = !open[row][col];
     _setOpen(open.slice());
   }
 
+  const [loDetail, _setDetail] = useState(los.slice())
+  useEffect(() => {
+    open.push(Array.from({length: loDetail[loDetail.length-1].level.length + 1}, () => false))
+    console.log(loDetail)
+  }, [loDetail]);
+  function addLO(){
+    loDetail.push({id:(loDetail.length+1).toString(),
+      name: ("LO ".concat((loDetail.length+1).toString())), level: ['Level 1']})
+    _setDetail(loDetail.slice());
+  }
+  function updateLO(row: number, text: string) {
+    loDetail[row].name = text;
+    _setDetail(loDetail.slice());
+  }
+  function delLO(row:number){
+    if(loDetail.length !== 1) {
+      loDetail.splice(row, 1)
+      _setDetail(loDetail.slice());
+    }
+    else{ alert("This is the last LO") }
+  }
+  function addLevel(row: number){
+    loDetail[row].level.push("Level ".concat((loDetail[row].level.length+1).toString()))
+    _setDetail(loDetail.slice());
+  }
+  function delLevel(row: number, col: number){
+    loDetail[row].level.splice(col, 1)
+    _setDetail(loDetail.slice());
+  }
+  function updateLevel(row: number, col: number, text: string) {
+    loDetail[row].level[col] = text;
+    _setDetail(loDetail.slice());
+  }
+  
   return(<div>
     <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 25, bottom: 25}}>
       <b style={{fontSize: 14}}>LO</b> <span>Manage</span>
@@ -109,35 +138,36 @@ function ManageLO(){
       </ModalHeader>
         <ModalBody>
           <div>
-            {los.map((lo, row) => (
+            {loDetail.map((lo, row) => (
               <CardDiv key={`row-${row}`}>
                 <div style={{display: "flex"}}>
                   <i className="fa fa-angle-down" onClick={() => toggle(row, 0)} style={{fontSize: 28}}></i>
-                  <LOEdit style={{marginBottom: 3, paddingRight: 5}} defaultValue={lo.name} key={`lo` + lo.id}/>
-                  <RightButton className="fa fa-window-close-o"></RightButton>
+                  <BorderlessInput style={{marginBottom: 3, paddingRight: 5}} key={`lo` + lo.id}
+                    value={lo.name} onChange={(e) => updateLO(row, e.target.value)}/>
+                  <RightButton className="fa fa-window-close-o" onClick={()=> delLO(row)}></RightButton>
                 </div>
                 <Collapse in={open[row][0]}>{
                   <div style={{marginLeft: 28}}>
                     {lo.level.map((lvl, col) => (
                       <div key={`row-${row}-col-${col}`}>
                         <div style={{display: "flex"}}>
-                          <LOEdit onClick={() => toggle(row, col + 1)} style={{marginBottom: -3, paddingRight: 5}}
-                            defaultValue={lvl}/>
-                          <LevelRightButton className="fa fa-window-close-o" ></LevelRightButton>
+                          <BorderlessInput style={{marginBottom: -3, paddingRight: 5}} value={lvl} 
+                            onChange={(e) => updateLevel(row, col, e.target.value)}/>
+                          <LevelRightButton className="fa fa-window-close-o" onClick={()=> delLevel(row, col)}></LevelRightButton>
                         </div>
                       </div>
                     ))}
-                    <p><LevelRightButton className="fa fa-plus-circle"></LevelRightButton></p>
+                    <p><LevelRightButton className="fa fa-plus-circle" onClick={()=> addLevel(row)}></LevelRightButton></p>
                   </div>
                 }</Collapse>
               </CardDiv>
             ))}
           </div>
 
-          <p style={{ marginBottom: 25 }}><RightButton className="fa fa-plus-circle"></RightButton></p>
+          <p style={{ marginBottom: 25 }}><RightButton className="fa fa-plus-circle" onClick={()=> addLO()}></RightButton></p>
         </ModalBody>
       <ModalFooter>
-        <Button variant="primary" onClick={() => setShow(false)}>Save</Button>
+        <Button variant="primary" onClick={() => {setShow(false); updateLo(loDetail)}}>Save</Button>
       </ModalFooter>
       </form>
     </Modal>
@@ -180,14 +210,6 @@ function LinkLOtoPLO(props:any) {
 }
 
 //MangeLO
-const LOEdit = styled.input.attrs({
-  type:'text'
-})`
-  border: none;
-  background: transparent;
-  width: 90%;
-`;
-
 const RightButton = styled.i`
   position: absolute;
   right: 15px;

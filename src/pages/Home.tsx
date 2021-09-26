@@ -55,13 +55,26 @@ function ManageProgram() {
   }, [show]);
 
   const [prog, setProg] = useState(Programs);
+  function updateProgram(row: number, text: string) {
+    prog[row].title = text;
+    setProg(prog.slice());
+  }
+  function delProgram(row:number){
+    prog.splice(row, 1)
+    setProg(prog.slice());
+  }
   function addPLO(row: number){
-    prog[row].plos.push("New PLO")
+    prog[row].plos.push("PLO".concat((prog[row].plos.length+1).toString()))
     setProg(prog.slice());
   }
   function delPLO(row: number, col: number){
     prog[row].plos.splice(col, 1)
     setProg(prog.slice());
+  }
+  function updatePLO(row: number, col: number, text: string) {
+    prog[row].plos[col] = text;
+    setProg(prog.slice());
+    console.log(prog)
   }
 
   return (
@@ -83,16 +96,17 @@ function ManageProgram() {
             {prog.map((pro, row) => (
               <CardDiv key={`row-${row}`}>
                 <div style={{display: "flex"}}>
-                  <h5 style={{marginBottom: 3, paddingRight: 5}} onClick={() => toggle(row)}>
-                    {pro.title}
-                  </h5>
-                  <RightButton className="fa fa-pencil"></RightButton>
+                <i className="fa fa-angle-down" onClick={() => toggle(row)} style={{fontSize: 28}}></i>
+                  <BorderlessInput style={{marginBottom: 3, paddingRight: 5}} value={pro.title} 
+                    onChange={(e) => updateProgram(row, e.target.value)}/>
+
+                  <RightButton className="fa fa-window-close-o" onClick={() => delProgram(row)}></RightButton>
                 </div>
                 <Collapse in={open[row]}>
                   <div style={{marginLeft: 15, marginBottom: 20}}>
                     {pro.plos.map((plo, col) => (
                       <div key={`row-${row}-col-${col}`}>
-                        {plo}
+                        <BorderlessInput value={plo} onChange={(e) => updatePLO(row, col, e.target.value)}/>
                         <RightButton className="fa fa-window-close-o" onClick={()=> delPLO(row, col)}></RightButton>
                       </div>
                     ))}
@@ -241,6 +255,14 @@ const CourseSpan = styled.span`
   font-size: 10px;
   float: right;
   margin-top: 12px;
+`;
+
+export const BorderlessInput = styled.input.attrs({
+  type:'text'
+})`
+  border: none;
+  background: transparent;
+  width: 90%;
 `;
 
 const RightButton = styled.i`
