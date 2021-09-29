@@ -2,53 +2,73 @@ import XLSX from 'xlsx';
 import { students } from '../pages/Course/Student';
 import { QuestionDetail } from '../shared/quiz';
 
-interface ExcelColumn {
+interface QuizColumn {
   Question: string;
   MaxScore: number;
 }
+interface StudentColumn {
+  ID: string;
+  Name: string;
+}
+export interface StudentData {
+  studentID: string;
+  studentName: string
+}
 
-let ImportedQuestion: Array<ExcelColumn> = []
+let ImportedQuestion: Array<QuizColumn> = []
 export let QuestionArray: Array<QuestionDetail> = []
+export let StudentArray: Array<StudentData> = []
 
-export function interpretExcel(fileUpload: HTMLInputElement) {
-    const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
-    if (regex.test(fileUpload.value.toLowerCase())) {
-      // let fileName = fileUpload.files![0].name; 
-      if (typeof (FileReader) !== 'undefined') {
-        const reader = new FileReader();
-        if (reader.readAsBinaryString) {
-          reader.onload = (e) => {
-            processExcel(reader.result);
-          };
-          reader.readAsBinaryString(fileUpload.files![0]);
-        }
-      } else {
-        console.log("This browser does not support HTML5.");
+export function interpretExcel(fileUpload: HTMLInputElement, importType: string) {
+  const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+  if (regex.test(fileUpload.value.toLowerCase())) {
+    // let fileName = fileUpload.files![0].name; 
+    if (typeof (FileReader) !== 'undefined') {
+      const reader = new FileReader();
+      if (reader.readAsBinaryString) {
+        reader.onload = (e) => {
+          processExcel(reader.result, importType);
+        };
+        reader.readAsBinaryString(fileUpload.files![0]);
       }
     } else {
-      console.log("Please upload a valid Excel file.");
+      console.log("This browser does not support HTML5.");
     }
+  } else {
+    console.log("Please upload a valid Excel file.");
+  }
 };
 
-function processExcel(data: any) {
+function processExcel(data: any, importType:string) {
   const workbook = XLSX.read(data, {type: 'binary'});
   const firstSheet = workbook.SheetNames[0];
   const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
-  for (let i = 0; i < excelRows.length; i++) {
-    ImportedQuestion.push({Question:((excelRows[i] as ExcelColumn).Question),
-      MaxScore:((excelRows[i] as ExcelColumn).MaxScore)});
+  if(importType === 'quiz') {
+    for (let i = 0; i < excelRows.length; i++) {
+      ImportedQuestion.push({Question:((excelRows[i] as QuizColumn).Question),
+        MaxScore:((excelRows[i] as QuizColumn).MaxScore)});
+    }
+    ImportedQuestion = getUnique(ImportedQuestion, 'Question');
+    for (let i = 0; i < ImportedQuestion.length; i++) { // add question no.
+      QuestionArray[i] = ({
+        name: "Question " + (i + 1) + ": " + ImportedQuestion[i].Question, 
+        maxscore: ImportedQuestion[i].MaxScore, linkedLO: []
+      })
+    }
   }
-  ImportedQuestion = getUnique(ImportedQuestion, 'Question');
-  for (let i = 0; i < ImportedQuestion.length; i++) { // add question no.
-    QuestionArray[i] = ({
-      name: "Question " + (i + 1) + ": " + ImportedQuestion[i].Question, 
-      maxscore: ImportedQuestion[i].MaxScore, linkedLO: []
-    })
+  else{
+    for (let i = 0; i < excelRows.length; i++) {
+      StudentArray.push({studentID:((excelRows[i] as StudentColumn).ID.toString()),
+        studentName:((excelRows[i] as StudentColumn).Name)});
+    }
+    console.log(StudentArray);
   }
+
 }
 
 export function clearExcel() {
   QuestionArray = [];
+  StudentArray = [];
 }
 
 function getUnique(array:any[], key:any) {
@@ -60,7 +80,7 @@ function getUnique(array:any[], key:any) {
     const k = key(item);
     if (!map.has(k)) map.set(k, item);
     return map;
-  }, new Map()).values()) as Array<ExcelColumn>;
+  }, new Map()).values()) as Array<QuizColumn>;
 }
 
 //Excel writinh

@@ -1,8 +1,10 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { studentResponse, programResponse, courseResponse } from '../../shared/initialData';
 import { exportExcel } from '../../utils';
 import { quizscore, PLOscore, ScoreTable } from './Dashboard/Table';
 import { students } from './Student';
@@ -26,7 +28,7 @@ export const DashboardScreen: React.FC = () => {
 function QuizScore(){
   const quizs: Array<quizscore> = [{id: 1, score: "5/5", detail: "Part 1 : 2/2 \n Part 1 : 3/3"},
   {id: 2, score: "10/10", detail: "Part 1 : 10/10"}, {id: 3, score: "1/10", detail: "Part 1 : 1/5 \n Part 2 : 0/5"}]
-  const QuizHead: Array<string> = ['Email', 'Name']
+  const QuizHead: Array<string> = ['ID', 'Name']
   for (let i = 0; i < quizs.length; i++) { //count unique quiz id
     QuizHead.push('Quiz'+(i+1));
   }
@@ -39,7 +41,7 @@ function OutcomeScore(){
   const PLOs: Array<PLOscore> = [{id: 1, score: "100%", detail: "LO1 100% \n LO2 100% \n LO3 100%"},
   {id: 2, score: "80%", detail: "LO1 100% \n LO2 100% \n LO3 100%"}, {id: 3, score: "-", detail: "No score"},
   {id: 4, score: "-", detail: "No score"}]
-  const PLOHead: Array<string> = ['Email', 'Name']
+  const PLOHead: Array<string> = ['ID', 'Name']
   for (let i = 0; i < PLOs.length; i++) { //count unique plo id
     PLOHead.push('PLO'+(i+1));
   }
@@ -49,6 +51,17 @@ function OutcomeScore(){
 }
 
 export function ExportOutcome(){
+  const [student, setStudent] = useState<Array<studentResponse>>([])
+  useEffect(() => {
+    const api = axios.create({baseURL: `http://localhost:8000/api`}); 
+      ( async () => {
+        let res1 = await api.get<programResponse[]>('/programs');
+        let res2 = await api.get<courseResponse[]>('/courses', {params: {programID: res1.data[0].programID}});
+        let res3 = await api.get<studentResponse[]>('/students', {params: {courseID: res2.data[0].courseID}});
+        setStudent(res3.data)
+      }) ()
+  },[])
+  
   const [show, setShow] = useState(false);
   const { register, handleSubmit, setValue } = useForm<{fileName: string, fileType: string}>();
   const [ check, _setCheck ] = useState<Array<boolean>>(

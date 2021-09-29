@@ -1,6 +1,12 @@
-import React from 'react';
-import { Table } from 'react-bootstrap';
-import { Link, } from 'react-router-dom';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Button, Modal, ModalBody, ModalFooter, ModalTitle, Table } from 'react-bootstrap';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+import { Link, useParams, useRouteMatch, } from 'react-router-dom';
+import { courseResponse, programResponse, studentRequest, studentResponse } from '../../shared/initialData';
+import { clearExcel, interpretExcel, StudentArray, StudentData } from '../../utils';
+
+const api = axios.create({baseURL: `http://localhost:8000/api`}); 
 
 export interface student {
   id: number,
@@ -13,6 +19,16 @@ export const students: Array<student> = [{id: 0, mail: "mail@mail.com", name: "S
 {id: 3, mail: "mail@mail.com", name: "Student Studying"}, {id: 4, mail: "student@mail.com", name: "Studying Student"}]
 
 export const StudentScreen: React.FC = () => {
+  const [student, setStudent] = useState<Array<studentResponse>>([])
+  useEffect(() => {
+      ( async () => {
+        let res1 = await api.get<programResponse[]>('/programs');
+        let res2 = await api.get<courseResponse[]>('/courses', {params: {programID: res1.data[0].programID}});
+        let res3 = await api.get<studentResponse[]>('/students', {params: {courseID: res2.data[0].courseID}});
+        setStudent(res3.data)
+      }) ()
+  },[])
+
   return (
     <div >
       <h2>Student</h2>
@@ -20,24 +36,25 @@ export const StudentScreen: React.FC = () => {
         <Table striped bordered className="table" responsive="sm">
           <thead>
             <tr>
-              <th>Email <TableSort /></th>
+              <th>Student ID <TableSort /></th>
               <th>Name <TableSort /></th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {students.map(std => (
+            {student.map(std => (
               <tr>
-                <td>{std.mail}</td>
-                <td>{std.name}</td>
+                <td>{std.studentID}</td>
+                <td>{std.studentName}</td>
                 <td>
-                  <Link to={`dashboard/${std.id}`}><button>Result</button></Link>
+                  <Link to={`dashboard/${std.studentID}`}><button>Result</button></Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
       </div>
+      <ImportStudent/>
     </div>
   );
 }
@@ -47,3 +64,61 @@ export function TableSort(props: any) {
     <i className="fa fa-sort tableSort"></i>
   )
 }
+
+function ImportStudent(){
+  const [show, setShow] = useState(false);
+  const [course, setCourse] = useState <Array<courseResponse>>([])
+  useEffect(() => {
+    ( async () => {
+      let res1 = await api.get<programResponse[]>('/programs');
+      let res2 = await api.get<courseResponse[]>('/courses', {params: {programID: res1.data[0].programID}});
+      setCourse(res2.data)
+    }) ()
+  },[])
+  console.log(course)
+  async function importStudent(cID: string, students: Array<StudentData>){
+    if(students.length !== 0) {
+      await api.post<studentRequest[]>('/students', {courseID: cID, students: 
+        [...students]});
+      alert("Import success!")
+    }
+    else{
+      alert("No student found!")
+    }
+  }
+  return(
+    <div>
+      <button className="floatbutton" onClick={() => setShow(true)} style={{position: "absolute", right: 25, bottom: 25}}>
+        <i className="fa fa-download"></i>Import
+      </button>
+      <Modal show={show} onHide={() => {setShow(false); clearExcel();}}>
+        <ModalHeader>
+          <ModalTitle>Import Students</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <p style={{margin: 0}}>Please import an excel file of the students list (.xlsx)</p>
+          <ImportExcel />
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="primary" onClick={() => {importStudent(course[0].courseID, StudentArray);  
+            setShow(false); clearExcel(); window.location.reload();}}>Save</Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+}
+
+function ImportExcel(props: any) {
+  return (
+    <div>
+      <label>Choose a file to import</label><br/>
+      <input type="file" id="fileUpload" onChange={Upload}/>
+    </div>
+  );   
+}
+
+function Upload(){
+  const fileUpload = (document.getElementById('fileUpload') as HTMLInputElement);
+  interpretExcel(fileUpload, 'student');
+}
+

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useRouteMatch, Switch, Route, Link, Redirect, useParams } from 'react-router-dom';
 import { QuizScreen } from './Quiz';
-import { PLOScreen } from './PLO';
+import { LOScreen } from './LO';
 import { StudentScreen } from './Student';
 import { DashboardScreen } from './Dashboard';
 import NavigationBar from '../../components/Navbar';
@@ -51,7 +51,7 @@ export default function CourseScreen() {
             <QuizScreen/>
           </Route>
           <Route path={`${path}/outcome`}>
-            <PLOScreen/>
+            <LOScreen/>
           </Route>
           <Route path={`${path}/student`}>
             <StudentScreen/>

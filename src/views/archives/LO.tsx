@@ -4,10 +4,10 @@ import { Button, Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'rea
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { EditIcon, Quizlist, CardDiv, LeftCheckbox } from '../../pages/Course/Quiz';
+import { BorderlessInput } from '../../pages/Home';
 import { courseResponse, loResponse, programResponse } from '../../shared/initialData';
 import { LOContext, LODetail } from '../../shared/lo';
-import { BorderlessInput } from '../Home';
-import { CardDiv, EditIcon, LeftCheckbox, Quizlist } from './Quiz';
 type ID = string;
 type LearningOutcomeMap = Map<ID, LearningOutcome>;
 
@@ -17,7 +17,7 @@ interface LearningOutcome {
   depth: number
 }
 
-export const PLOScreen: React.FC = () => {
+export const LOScreen: React.FC = () => {
   const { los } = useContext(LOContext)
   const PLOs: LearningOutcomeMap = new Map([
     ["ab201ksdn1", {
@@ -105,15 +105,8 @@ function ManageLO(){
         let res3 = await api.get<loResponse[]>('/los', {params: {courseID: res2.data[0].courseID} });
         _setDetail2(res3.data);
       }) ()
-  })
+  },[])
   console.log(loDetail2)
-  //console.log('lvl lengh', loDetail2[0]?.levels.length) 
-  // let lvlArray:Array<Array<boolean>> = (loDetail2.map(los => { 
-  //   return Array.from({length: los?.levels.length}, () => false);
-  // }))
-  // console.log(lvlArray)
-  // const [open2, _setOpen2] = useState(lvlArray.slice());
-  // console.log(open2)
 
   useEffect(() => {
     open.push(Array.from({length: loDetail[loDetail.length-1].level.length + 1}, () => false))

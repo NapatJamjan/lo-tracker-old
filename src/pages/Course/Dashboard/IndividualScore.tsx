@@ -1,13 +1,22 @@
-import { AnyRecord } from 'dns';
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { studentResponse, programResponse, courseResponse } from '../../../shared/initialData';
 import { ExportOutcome } from '../Dashboard';
-import { students } from '../Student';
 import { quizscore, PLOscore, ScoreTable } from './Table';
 
 export const IndividualScore:React.FC = (props:any) =>{
-  const studentlist = students;
+  const [student, setStudent] = useState<Array<studentResponse>>([])
+  useEffect(() => {
+    const api = axios.create({baseURL: `http://localhost:8000/api`}); 
+      ( async () => {
+        let res1 = await api.get<programResponse[]>('/programs');
+        let res2 = await api.get<courseResponse[]>('/courses', {params: {programID: res1.data[0].programID}});
+        let res3 = await api.get<studentResponse[]>('/students', {params: {courseID: res2.data[0].courseID}});
+        setStudent(res3.data)
+      }) ()
+  },[])
   const params = useParams<{ id: string }>();
   const history = useHistory();
   const [state, setState] = useState("Quiz");
@@ -16,9 +25,9 @@ export const IndividualScore:React.FC = (props:any) =>{
       <i className="fa fa-arrow-left"></i>Back
     </BackButton>
     <h4 style={{position: "absolute", left: 0, right: 0, textAlign: "center"}}>Individual Summary</h4>
-    <h6>Course ID:{params.id}</h6>
-    <h6>Name : {studentlist[parseInt(params.id)].name}</h6>
-    <h6>Email : {studentlist[parseInt(params.id)].mail}</h6>
+    <h6>Student ID: {params.id}</h6>
+    <h6>Name : {student.find(e => e.studentID == params.id)?.studentName}</h6>
+    {/* <h6>Email : {student[parseInt(params.id)].studentName}</h6> */}
     <DashboardDiv>
       <ButtonTab>
         <button onClick={() => setState("Quiz")} style={{marginRight: 5}}>Quiz Score</button>

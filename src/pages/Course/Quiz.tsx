@@ -117,7 +117,7 @@ function ImportExcel(props: any) {
 
 function Upload(){
   const fileUpload = (document.getElementById('fileUpload') as HTMLInputElement);
-  interpretExcel(fileUpload);
+  interpretExcel(fileUpload, 'quiz');
 }
 
 function LinkLOButton(props: any){
