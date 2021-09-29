@@ -12,6 +12,7 @@ const ProviderComposer: React.FC<{
 };
 
 export const ContextProvider: React.FC = ({children}) => {
+  
   return (<ProviderComposer contexts={[<ClassroomProvider/>, <AuthProvider/>,<QuizProvider/>,<LOProvider/>,
    <BrowserRouter/>]}>
     {children}</ProviderComposer>);

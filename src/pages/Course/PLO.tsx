@@ -1,8 +1,10 @@
+import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Collapse, Modal, ModalBody, ModalFooter, ModalTitle } from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { courseResponse, loResponse, programResponse } from '../../shared/initialData';
 import { LOContext, LODetail } from '../../shared/lo';
 import { BorderlessInput } from '../Home';
 import { CardDiv, EditIcon, LeftCheckbox, Quizlist } from './Quiz';
@@ -92,14 +94,33 @@ function ManageLO(){
     open[row][col] = !open[row][col];
     _setOpen(open.slice());
   }
-
   const [loDetail, _setDetail] = useState(los.slice())
+
+  const [loDetail2, _setDetail2] = useState<Array<loResponse>>([]);
+  useEffect(() => {
+    const api = axios.create({baseURL: `http://localhost:8000/api`}); 
+      ( async () => {
+        let res1 = await api.get<programResponse[]>('/programs');
+        let res2 = (await api.get<courseResponse[]>('/courses', {params: {programID: res1.data[0].programID}}));
+        let res3 = await api.get<loResponse[]>('/los', {params: {courseID: res2.data[0].courseID} });
+        _setDetail2(res3.data);
+      }) ()
+  })
+  console.log(loDetail2)
+  //console.log('lvl lengh', loDetail2[0]?.levels.length) 
+  // let lvlArray:Array<Array<boolean>> = (loDetail2.map(los => { 
+  //   return Array.from({length: los?.levels.length}, () => false);
+  // }))
+  // console.log(lvlArray)
+  // const [open2, _setOpen2] = useState(lvlArray.slice());
+  // console.log(open2)
+
   useEffect(() => {
     open.push(Array.from({length: loDetail[loDetail.length-1].level.length + 1}, () => false))
-    console.log(loDetail)
+    //console.log(loDetail)
   }, [loDetail]);
   function addLO(){
-    loDetail.push({id:(loDetail.length+1).toString(),
+    loDetail.push({id:(loDetail.length+1).toString(), courseID:'0',
       name: ("LO ".concat((loDetail.length+1).toString())), level: ['Level 1']})
     _setDetail(loDetail.slice());
   }
@@ -138,6 +159,19 @@ function ManageLO(){
       </ModalHeader>
         <ModalBody>
           <div>
+            {loDetail2.map((lo,row) => ( // lo from db
+              <div>
+              <h6>{lo.info}</h6> 
+              <Collapse in={open[row][0]}>{
+                <div>
+                  {lo.levels.map((lvl) => (
+                    <span>Level{lvl.level} {lvl.info} <br/></span>
+                  ))}
+                </div>
+              }</Collapse>
+              </div>
+            ))}
+
             {loDetail.map((lo, row) => (
               <CardDiv key={`row-${row}`}>
                 <div style={{display: "flex"}}>

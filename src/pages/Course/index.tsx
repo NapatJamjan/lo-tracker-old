@@ -1,11 +1,12 @@
-import React from 'react';
-import { useRouteMatch, Switch, Route, Link, Redirect } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useRouteMatch, Switch, Route, Link, Redirect, useParams } from 'react-router-dom';
 import { QuizScreen } from './Quiz';
 import { PLOScreen } from './PLO';
 import { StudentScreen } from './Student';
 import { DashboardScreen } from './Dashboard';
 import NavigationBar from '../../components/Navbar';
 import {IndividualScore} from './Dashboard/IndividualScore';
+import { ClassroomContext } from '../../shared/classroom';
 
 function SubNavBar() {
   const { url } = useRouteMatch();
@@ -37,11 +38,13 @@ function SubNavBar() {
 
 export default function CourseScreen() {
   const { path } = useRouteMatch();
+  const params = useParams<{ id: string }>();
+  const { courses } = useContext(ClassroomContext);
   return (
     <div>
       <NavigationBar/>
       <div className="course">
-        <h4>CSC100 Tutorial Course</h4>
+        <h4>{(courses.find(e => e.id == params.id))?.name}</h4>
         <SubNavBar/>
         <Switch>
           <Route exact path={path}>

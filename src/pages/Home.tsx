@@ -6,6 +6,8 @@ import { Modal, ModalTitle, ModalBody, ModalFooter, Collapse } from 'react-boots
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { ClassroomContext, CourseDetail } from '../shared/classroom';
 import { CardDiv } from './Course/Quiz';
+import axios from 'axios';
+import { courseRequest, courseResponse, initData, programRequest, programResponse, studentResponse } from '../shared/initialData';
 
 export default function HomeScreen() {
   return (
@@ -193,7 +195,8 @@ function CourseCard() {
   }
   let courseGroups = new Map<string, Array<CourseDetail>>();
   for (let i = 0; i < courses.length; ++i) {
-    courseGroups.set(`${courses[i].semester},${courses[i].year}`, [...(courseGroups.get(`${courses[i].semester},${courses[i].year}`) || []), {...courses[i]}]);
+    courseGroups.set(`${courses[i].semester},${courses[i].year}`, [...(courseGroups.get(`${courses[i].semester}, 
+    ${courses[i].year}`) || []), {...courses[i]}]);
   }
   courses.sort((course1, course2) => {
     if (course1.year !== course2.year) return course2.year - course1.year;
