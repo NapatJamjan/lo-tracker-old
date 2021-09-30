@@ -19,7 +19,7 @@ export const students: Array<student> = [{id: 0, mail: "mail@mail.com", name: "S
 {id: 3, mail: "mail@mail.com", name: "Student Studying"}, {id: 4, mail: "student@mail.com", name: "Studying Student"}]
 
 export const StudentScreen: React.FC = () => {
-  const [student, setStudent] = useState<Array<studentResponse>>([])
+  const [student, setStudent] = useState<Array<studentResponse>>([{studentID: "000", studentName: "Loading..."}])
   useEffect(() => {
       ( async () => {
         let res1 = await api.get<programResponse[]>('/programs');
@@ -47,7 +47,8 @@ export const StudentScreen: React.FC = () => {
                 <td>{std.studentID}</td>
                 <td>{std.studentName}</td>
                 <td>
-                  <Link to={`dashboard/${std.studentID}`}><button>Result</button></Link>
+                  <Link to={`dashboard/${std.studentID}`} style={{marginRight: 20}}><button>Result</button></Link>
+                  <button style={{position:"absolute"}}>Kick</button>
                 </td>
               </tr>
             ))}

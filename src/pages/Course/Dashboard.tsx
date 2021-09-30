@@ -51,7 +51,7 @@ function OutcomeScore(){
 }
 
 export function ExportOutcome(){
-  const [student, setStudent] = useState<Array<studentResponse>>([])
+  const [student, setStudent] = useState<Array<studentResponse>>([{studentID: "000", studentName: "Loading..."}])
   useEffect(() => {
     const api = axios.create({baseURL: `http://localhost:8000/api`}); 
       ( async () => {
